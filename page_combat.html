@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grille 10x10</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            grid-template-rows: repeat(10, 1fr);
+            width: 500px;
+            height: 500px;
+            border: 1px solid #ccc;
+        }
+        .cell {
+            border: 1px solid transparent; /* Invisible borders */
+        }
+    </style>
+</head>
+<body>
+    <div class="grid">
+        <!-- 100 cells -->
+        <script>
+            for (let i = 0; i < 100; i++) {
+                document.write('<div class="cell"></div>');
+            }
+        </script>
+    </div>
+</body>
+</html>
