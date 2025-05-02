@@ -60,8 +60,6 @@ for (let row = 0; row < 10; row++) {
     }
 }
 
-localStorage.setItem('troopPositions', JSON.stringify( troopPositions ));
-
 // Fonction pour récupérer les positions des troupes
 function getTroopPositions() {
     return troopPositions;
@@ -89,6 +87,9 @@ function initializeTroops(player, faction) {
         });
         troopList.appendChild(troopItem);
     });
+
+    localStorage.setItem('troopPositions', JSON.stringify(troopPositions));
+    alert('Positions des troupes : ' + JSON.stringify(troopPositions));
 }
 
 // Mise à jour dynamique en fonction des factions choisies par les joueurs
@@ -112,3 +113,6 @@ const player2TroopList = document.querySelector('#player2-troop-list');
 
 player1TroopList.style.alignItems = 'flex-end'; // Joueur 1 à droite
 player2TroopList.style.alignItems = 'flex-start'; // Joueur 2 à gauche
+
+document.getElementById('start-combat').addEventListener('click', () => {
+});
