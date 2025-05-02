@@ -35,6 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll('.faction-button').forEach(button => {
         button.addEventListener('click', (event) => {
             const player = event.target.dataset.player;
+            const faction = event.target.dataset.faction;
 
             // Supprime la classe 'selected' des autres boutons de faction pour ce joueur
             document.querySelectorAll(`#player${player}-faction-selection .faction-button`).forEach(btn => {
@@ -43,6 +44,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // Ajoute la classe 'selected' au bouton cliqué
             event.target.classList.add('selected');
+
+            // Désactive la faction choisie pour l'autre joueur et change sa couleur en rouge
+            const otherPlayer = player === "1" ? "2" : "1";
+            document.querySelectorAll(`#player${otherPlayer}-faction-selection .faction-button`).forEach(btn => {
+                if (btn.dataset.faction === faction) {
+                    btn.disabled = true;
+                    btn.classList.add('disabled');
+                } else {
+                    btn.disabled = false;
+                    btn.classList.remove('disabled');
+                }
+            });
 
             // Active le bouton "Valider"
             const validateButton = document.querySelector(`#player${player}-validate-faction`);
