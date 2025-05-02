@@ -2,11 +2,54 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Document</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mode Combat</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <p>Hello world!</p>
-    <h1>nique</h1>
-    <h3>lol</h3>
+    <h1>Mode Combat Multijoueur</h1>
+
+    <!-- Écran d’accueil du mode combat -->
+    <div id="combat-mode">
+        <!-- Zone Joueur 1 -->
+        <div id="player1-zone" class="player-zone">
+            <h2>Joueur 1</h2>
+            <div id="player1-faction-selection">
+                <h3>Choisissez votre faction</h3>
+                <button class="faction-button" data-player="1" data-faction="empire">Empire</button>
+                <button class="faction-button" data-player="1" data-faction="horde">Horde</button>
+                <button class="faction-button" data-player="1" data-faction="mages">Mages</button>
+            </div>
+            <div id="player1-troop-selection" style="display: none;">
+                <h3>Sélectionnez vos troupes</h3>
+                <div class="troop-list" data-player="1"></div>
+            </div>
+            <button id="player1-ready" style="display: none;">Prêt</button>
+        </div>
+
+        <!-- Échiquier central -->
+        <div id="game-board">
+            <h2>Échiquier</h2>
+            <div id="board-grid" class="grid"></div>
+        </div>
+
+        <!-- Zone Joueur 2 -->
+        <div id="player2-zone" class="player-zone">
+            <h2>Joueur 2</h2>
+            <div id="player2-faction-selection">
+                <h3>Choisissez votre faction</h3>
+                <button class="faction-button" data-player="2" data-faction="empire">Empire</button>
+                <button class="faction-button" data-player="2" data-faction="horde">Horde</button>
+                <button class="faction-button" data-player="2" data-faction="mages">Mages</button>
+            </div>
+            <div id="player2-troop-selection" style="display: none;">
+                <h3>Sélectionnez vos troupes</h3>
+                <div class="troop-list" data-player="2"></div>
+            </div>
+            <button id="player2-ready" style="display: none;">Prêt</button>
+        </div>
+    </div>
+
+    <script type="module" src="main.js"></script>
 </body>
 </html>
