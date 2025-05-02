@@ -85,9 +85,19 @@ document.addEventListener("DOMContentLoaded", () => {
         button.addEventListener('click', (event) => {
             const player = event.target.dataset.player;
 
-            // Cache la sélection de faction et affiche la sélection de troupes
+            // Cache la sélection de faction
             document.querySelector(`#player${player}-faction-selection`).style.display = 'none';
-            document.querySelector(`#player${player}-troop-selection`).style.display = 'block';
+
+            // Vérifie si les deux joueurs ont validé leurs factions
+            const allValidated = Array.from(document.querySelectorAll('.validate-faction-button')).every(btn => btn.disabled);
+            if (allValidated) {
+                // Passe à la phase de sélection et placement des troupes
+                document.querySelector('#combat-mode').style.display = 'none';
+                document.querySelector('#troop-placement-phase').style.display = 'block';
+
+                // Initialise l'échiquier
+                initializeBoard();
+            }
         });
     });
 
@@ -200,5 +210,51 @@ document.addEventListener("DOMContentLoaded", () => {
         const combatEngine = new CombatEngine(selectedTroops, aiFaction.units, grid);
         combatEngine.startCombat();
         resultText.textContent = "Combat terminé. Consultez la console pour les détails.";
+    }
+
+    function initializeBoard() {
+        const boardGrid = document.querySelector('#board-grid');
+        boardGrid.innerHTML = '';
+
+        for (let row = 0; row < 10; row++) {
+            for (let col = 0; col < 10; col++) {
+                const cell = document.createElement('div');
+                cell.classList.add('grid-cell');
+                cell.dataset.row = row;
+                cell.dataset.col = col;
+                boardGrid.appendChild(cell);
+            }
+        }
+
+        // Ajoute la logique de drag-and-drop pour le placement des troupes
+        enableTroopPlacement();
+    }
+
+    function enableTroopPlacement() {
+        const troopItems = document.querySelectorAll('.troop-item');
+        const gridCells = document.querySelectorAll('.grid-cell');
+
+        troopItems.forEach(item => {
+            item.draggable = true;
+            item.addEventListener('dragstart', (event) => {
+                event.dataTransfer.setData('text/plain', event.target.id);
+            });
+        });
+
+        gridCells.forEach(cell => {
+            cell.addEventListener('dragover', (event) => {
+                event.preventDefault();
+            });
+
+            cell.addEventListener('drop', (event) => {
+                event.preventDefault();
+                const troopId = event.dataTransfer.getData('text/plain');
+                const troopElement = document.getElementById(troopId);
+
+                if (troopElement && !cell.hasChildNodes()) {
+                    cell.appendChild(troopElement);
+                }
+            });
+        });
     }
 });

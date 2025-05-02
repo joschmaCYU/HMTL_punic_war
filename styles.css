@@ -12,53 +12,6 @@ h1, h2 {
     color: #333;
 }
 
-button {
-    padding: 10px 20px;
-    margin: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    background-color: #007BFF;
-    color: white;
-    border: none;
-    border-radius: 5px;
-}
-
-button:hover {
-    background-color: #0056b3;
-}
-
-button.faction-button {
-    background-color: #007BFF;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    margin: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-}
-
-button.faction-button:hover {
-    background-color: #0056b3;
-}
-
-button.faction-button.selected {
-    background-color: #004080;
-    color: #fff;
-    box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.5);
-    transform: translateY(2px);
-    cursor: default;
-}
-
-button.faction-button.disabled {
-    background-color: red;
-    color: white;
-    cursor: not-allowed;
-    box-shadow: none;
-    transform: none;
-}
-
 #grid {
     display: grid;
     grid-template-columns: repeat(8, 50px);
@@ -71,8 +24,8 @@ button.faction-button.disabled {
 }
 
 .grid-cell {
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
     background-color: #e0e0e0;
     border: 1px solid #999;
     display: flex;
@@ -146,9 +99,62 @@ button.faction-button.disabled {
 }
 
 #board-grid {
+    margin: 0 auto;
+    position: relative;
+    width: 650px;
+    height: 650px;
     display: grid;
-    grid-template-columns: repeat(10, 50px);
-    grid-template-rows: repeat(10, 50px);
+    grid-template-columns: repeat(10, 1fr);
+    grid-template-rows: repeat(10, 1fr);
     gap: 2px;
-    margin-top: 20px;
+    background-color: #f4f4f4;
+    border: black;  
+}
+
+#player1-troop-list {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+#player2-troop-list {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+#player1-troop-list .troop-item, #player2-troop-list .troop-item {
+    width: 60px;
+    height: 60px    ;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: grab;
+    user-select: none;
+}
+
+#player1-troop-list .troop-item:active, #player2-troop-list .troop-item:active {
+    cursor: grabbing;
+}
+
+.grid-cell .troop-item {
+    width: 100%;
+    height: 100%;
+    background-color: inherit;
+    border: none;
+    cursor: default;
 }

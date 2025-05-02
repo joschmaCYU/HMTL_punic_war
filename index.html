@@ -9,45 +9,34 @@
 <body>
     <h1>Mode Combat Multijoueur</h1>
 
-    <!-- Écran d’accueil du mode combat -->
-    <div id="combat-mode">
-        <!-- Zone Joueur 1 -->
-        <div id="player1-zone" class="player-zone">
-            <h2>Joueur 1</h2>
-            <div id="player1-faction-selection">
-                <h3>Choisissez votre faction</h3>
-                <button class="faction-button" data-player="1" data-faction="rome">Rome</button>
-                <button class="faction-button" data-player="1" data-faction="carthage">Carthage</button>
-            </div>
-            <div id="player1-troop-selection" style="display: none;">
-                <h3>Sélectionnez vos troupes</h3>
-                <div class="troop-list" data-player="1"></div>
-            </div>
-            <button id="player1-ready" style="display: none;">Prêt</button>
-        </div>
-
-        <!-- Échiquier central -->
-        <div id="game-board">
-            <h2>Échiquier</h2>
-            <div id="board-grid" class="grid"></div>
-        </div>
-
-        <!-- Zone Joueur 2 -->
-        <div id="player2-zone" class="player-zone">
-            <h2>Joueur 2</h2>
-            <div id="player2-faction-selection">
-                <h3>Choisissez votre faction</h3>
-                <button class="faction-button" data-player="2" data-faction="rome">Rome</button>
-                <button class="faction-button" data-player="2" data-faction="carthage">Carthage</button>
-            </div>
-            <div id="player2-troop-selection" style="display: none;">
-                <h3>Sélectionnez vos troupes</h3>
-                <div class="troop-list" data-player="2"></div>
-            </div>
-            <button id="player2-ready" style="display: none;">Prêt</button>
-        </div>
+    <div id="player1-selection">
+        <h2>Joueur 1</h2>
+        <label for="player1-faction">Choisissez votre faction :</label>
+        <select id="player1-faction">
+            <option value="rome">Rome</option>
+            <option value="carthage">Carthage</option>
+        </select>
     </div>
 
-    <script type="module" src="main.js"></script>
+    <div id="player2-selection">
+        <h2>Joueur 2</h2>
+        <label for="player2-faction">Choisissez votre faction :</label>
+        <select id="player2-faction">
+            <option value="rome">Rome</option>
+            <option value="carthage">Carthage</option>
+        </select>
+    </div>
+
+    <button id="start-game" onclick="startGame()">Lancer</button>
+
+    <script>
+        function startGame() {
+            const player1Faction = document.getElementById('player1-faction').value;
+            const player2Faction = document.getElementById('player2-faction').value;
+
+            // Redirige vers la page de placement des troupes avec les factions sélectionnées
+            window.location.replace(`troop_placement.html?player1Faction=${player1Faction}&player2Faction=${player2Faction}`);
+        }
+    </script>
 </body>
 </html>
