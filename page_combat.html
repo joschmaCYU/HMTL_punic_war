@@ -40,6 +40,8 @@
         <ul id="player2-troop-info"></ul>
     </div>
 
+    <button id="previous-page" onclick="window.location.replace('troop_placement.html')">Page Précédente</button>
+
     <script>
         // Récupérer les positions des troupes depuis localStorage
         const troopPositions = JSON.parse(localStorage.getItem('troopPositions')) || {};
