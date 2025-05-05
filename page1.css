@@ -1,4 +1,23 @@
 
+#players-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 50px; /* espace entre les deux */
+    margin-top: 20px;
+}
+
+#player1-selection,
+#player2-selection {
+    width: 250px; /* largeur fixe pour qu'ils puissent se placer côte à côte */
+    padding: 20px;
+    border-radius: 1rem;
+    background-color: #f9f9f9;
+    border: 2px solid #ccc;
+}
+
+
+
 #start-game {
     width: 166px;
     height: 62px;
@@ -9,7 +28,10 @@
     border: none;
     background: #8b5e3c; /* brun/terre cuite */
     transition: 0.1s; 
-    position: relative;
+    position: fixed;
+    bottom:350px;      /* distance depuis le bas de l’écran */
+    align-content: center;        /* position horizontale au centre */
+    z-index: 10;
 }
 
 #start-game::before {
