@@ -100,6 +100,8 @@ function handleDrop(e, row, col, cell) {
     const pos = `${row}-${col}`;
     troopPositions[pos] = troopId;
 
+    localStorage.setItem('troopPositions', JSON.stringify(troopPositions));
+
     updateTroopTable(getPlayerLabel(player), troop.textContent, pos);
 }
 
@@ -140,7 +142,7 @@ function setupCombatButton() {
         const params = new URLSearchParams();
         params.set('troopPositions', JSON.stringify(troopPositions));
         params.set('playerTroops', JSON.stringify(playerTroops));
-        window.location.replace(`page_combat.html?${params.toString()}`);
+        window.location.href = `page_combat.html?${params.toString()}`;
     });
 }
 
