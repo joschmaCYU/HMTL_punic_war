@@ -3,50 +3,39 @@ const unitTypes = {
     Légionnaire: {
         name: 'Légionnaire',
         type: 'infanterie légère',
-        description: "Soldats inexpérimentés et moyennement équipés, placés en première ligne pour améliorer leurs aptitudes.",
+        description: "Unité de base de l armée romaine, armée d un glaive et d un bouclier.",
         health: 10,
         morale: 5,
         attack: 4,
         defense: 1,
         line: 1,
     },
-    princeps: {
-        name: 'Princeps',
-        type: 'infanterie lourde',
-        description: "Infanterie lourde assez coûteuse à équiper mais résistante, historiquement placée derrière les Hastati.",
+    Archer: {
+        name: 'Archer',
+        type: 'infanterie longue distance',
+        description: "tir à distance avec des flèches, mais vulnérable au corps à corps.",
         health: 10,
         morale: 10,
         attack: 4,
         defense: 2,
-        line: 2,
+        line: 3,
     },
-    triarii: {
-        name: 'Triarii',
-        type: 'infanterie lourde',
-        description: "Infanterie lourde de vétérans, munie de longues lances contre la cavalerie (+1 puissance).",
+    Cavalier: {
+        name: 'Cavalier',
+        type: 'cavalerie lourde',
+        description: "Unité de cavalerie lourde, armée d une lance et d un bouclier.",
         health: 10,
         morale: 10,
         attack: 4, // Vous pouvez ajouter +1 lors d'une attaque spécifique si nécessaire
         defense: 2,
-        line: 3,
+        line: 2,
     },
-    rome: ['', 'Archer', 'Cavalier'],
-    carthage: ['Éléphant de guerre', 'Lancier', 'Frondeur']
 };
 
 // Définition des types d'unités pour Carthage
 const carthageUnitTypes = {
-    ibere: {
-        name: 'Infanterie Ibère',
-        type: 'infanterie légère',
-        description: "Une infanterie légère formant l’avant-garde.",
-        health: 10,
-        morale: 5,
-        attack: 3,
-        defense: 1,
-        line: 1,
-    },
-    gauloise: {
+
+    Lancier: {
         name: 'Infanterie Gauloise',
         type: 'infanterie légère',
         description: "Une infanterie courageuse et susceptible de charges furieuses.",
@@ -56,25 +45,15 @@ const carthageUnitTypes = {
         defense: 0,
         line: 1,
     },
-    libyen: {
-        name: 'Lanciers Libyens',
-        type: 'infanterie lourde',
-        description: "Pouvant former une phalange, ils sont aussi utilisés comme piquiers contre la cavalerie (+1 puissance).",
+    Frondeur: {
+        name: 'Frondeur',
+        type: 'infanterie légère',
+        description: "Tireur d élite armé d une fronde, capable de tirer à distance.",
         health: 10,
         morale: 5,
-        attack: 4,
-        defense: 2,
-        line: 2,
-    },
-    numides: {
-        name: 'Cavalerie Numides',
-        type: 'cavalerie légère',
-        description: "Cavalerie légère très mobile, capable d’harceler l’ennemi et de le poursuivre en cas de fuite.",
-        health: 10,
-        morale: 5,
-        attack: 4,
+        attack: 3,
         defense: 1,
-        line: 3,
+        line: 1,
     },
     elephants: {
         name: 'Eléphants de guerre',
