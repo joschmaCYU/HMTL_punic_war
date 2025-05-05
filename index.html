@@ -44,7 +44,7 @@ TODO :
 
     <button id="start-game" onclick="startGame()">Lancer</button>
 
-    <script>
+    <script src="page1.js">
         function startGame() {
             const player1Faction = document.getElementById('player1-faction').value;
             const player2Faction = document.getElementById('player2-faction').value;
@@ -53,6 +53,5 @@ TODO :
             window.location.href = `troop_placement.html?player1Faction=${player1Faction}&player2Faction=${player2Faction}`;
         }
     </script>
-
 </body>
 </html>
