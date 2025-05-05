@@ -1,7 +1,7 @@
 // Définition des types d'unités pour Rome
 const unitTypes = {
-    hastati: {
-        name: 'Hastati',
+    Légionnaire: {
+        name: 'Légionnaire',
         type: 'infanterie légère',
         description: "Soldats inexpérimentés et moyennement équipés, placés en première ligne pour améliorer leurs aptitudes.",
         health: 10,
@@ -30,16 +30,8 @@ const unitTypes = {
         defense: 2,
         line: 3,
     },
-    equites: {
-        name: 'Equites',
-        type: 'cavalerie lourde',
-        description: "Cavalerie lourde composée de nobles et riches Romains. Leur charge triple leur valeur d'attaque pour la première attaque, mais les chevaux sont difficiles à contrôler.",
-        health: 10,
-        morale: 5,
-        attack: 3,
-        defense: 1,
-        line: 3,
-    },
+    rome: ['', 'Archer', 'Cavalier'],
+    carthage: ['Éléphant de guerre', 'Lancier', 'Frondeur']
 };
 
 // Définition des types d'unités pour Carthage
