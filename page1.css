@@ -1,5 +1,24 @@
 
-.start-game {
+#players-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 50px; /* espace entre les deux */
+    margin-top: 20px;
+}
+
+#player1-selection,
+#player2-selection {
+    width: 250px; /* largeur fixe pour qu'ils puissent se placer côte à côte */
+    padding: 20px;
+    border-radius: 1rem;
+    background-color: #f9f9f9;
+    border: 2px solid #ccc;
+}
+
+
+
+#start-game {
     width: 166px;
     height: 62px;
     cursor: pointer;
@@ -9,10 +28,13 @@
     border: none;
     background: #8b5e3c; /* brun/terre cuite */
     transition: 0.1s; 
-    position: relative;
+    position: fixed;
+    bottom:350px;      /* distance depuis le bas de l’écran */
+    align-content: center;        /* position horizontale au centre */
+    z-index: 10;
 }
 
-.start-game::before {
+#start-game::before {
     content: '';
     width: 100%;
     height: 100%;
@@ -24,7 +46,7 @@
     top: 0;
 }
 
-.start-game:hover {
+#start-game:hover {
     transform: scale(0.9);
     background: radial-gradient(circle at 10% 20%, #e3b778 20%, #c97b49 100%);
     transition: 0.5s;
