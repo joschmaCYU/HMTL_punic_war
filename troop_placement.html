@@ -20,9 +20,89 @@
         <div id="board-grid" class="grid"></div>
     </div>
 
+
     <button id="return-home" onclick="window.location.replace('index.html')">Retour à la page de base</button>
     <button id="start-combat" onclick="window.location.replace('page_combat.html')">Lancer le Combat</button>
 
     <script src="troop.js"></script>
+    <script>
+        const troopValues = {
+            'Légionnairer': 1, // Rome
+            'Archer': 2, // Rome
+            'Cavalier': 3, // Rome
+            'Éléphant de guerre': 4, // Carthage
+            'Lancier': 5, // Carthage
+            'Frondeur': 6  // Carthage
+        };
+
+
+
+        // Mettre à jour le tableau des troupes en utilisant troopPositions
+        function updateTroopTableFromPositions() {
+            const tableBody = document.getElementById('troop-table-body');
+            tableBody.innerHTML = ''; // Réinitialiser le tableau
+
+            Object.entries(troopPositions).forEach(([position, troopValues]) => {
+                const player = troopValues.startsWith('player1') ? 'Joueur 1' : 'Joueur 2';
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${player}</td>
+                    <td>${troopValues}</td>
+                    <td>${position}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Exemple d'utilisation :
+        updateTroopTable('Joueur 1', 'Légionnaire', '0-0');
+        updateTroopTable('Joueur 2', 'Éléphant de guerre', '9-9');
+
+        // Modification de l'événement drop pour inclure la mise à jour du tableau
+        const boardGrid = document.getElementById('board-grid');
+        for (let row = 0; row < 10; row++) {
+            for (let col = 0; col < 10; col++) {
+                const cell = document.createElement('div');
+                cell.classList.add('grid-cell');
+                cell.dataset.row = row;
+                cell.dataset.col = col;
+
+                cell.addEventListener('dragover', (event) => {
+                    event.preventDefault();
+                });
+
+                cell.addEventListener('drop', (event) => {
+                    event.preventDefault();
+                   
+                    const troopElement = document.getElementById(troopValues);
+
+                    if (troopElement && !cell.hasChildNodes()) {
+                        cell.appendChild(troopElement.cloneNode(true));
+                        troopElement.style.width = '100%';
+                        troopElement.style.height = '100%';
+
+                        const positionKey = `${row}-${col}`;
+                        troopPositions[positionKey] = troopValues;
+
+                        const player = troopValues.startsWith('player1') ? 'Joueur 1' : 'Joueur 2';
+                        updateTroopTable(player, troopValues, positionKey);
+                    }
+                });
+
+                boardGrid.appendChild(cell);
+            }
+        }
+
+        document.getElementById('start-combat').addEventListener('click', () => {
+            const troopPositionsEncoded = encodeURIComponent(JSON.stringify(troopPositions));
+            const playerTroopsEncoded = encodeURIComponent(JSON.stringify(playerTroops));
+            
+            // Rediriger vers la page de combat avec les données encodées dans l'URL
+            window.location.replace(`page_combat.html?troopPositions=${troopPositionsEncoded}&playerTroops=${playerTroopsEncoded}`);
+        });
+
+        // Appeler la fonction pour initialiser le tableau
+        updateTroopTableFromPositions();
+    </script>
 </body>
 </html>

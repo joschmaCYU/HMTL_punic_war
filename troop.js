@@ -116,3 +116,4 @@ player2TroopList.style.alignItems = 'flex-start'; // Joueur 2 à gauche
 
 document.getElementById('start-combat').addEventListener('click', () => {
 });
+

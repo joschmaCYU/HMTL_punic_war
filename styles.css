@@ -138,7 +138,7 @@ h1, h2 {
 #player1-troop-list .troop-item, #player2-troop-list .troop-item {
     width: 60px;
     height: 60px    ;
-    background-color: #f0f0f0;
+    background-color: #ffffff;
     border: 1px solid #ccc;
     display: flex;
     align-items: center;

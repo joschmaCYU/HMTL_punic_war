@@ -27,12 +27,39 @@
     </style>
 </head>
 <body>
+    <div id="player1-info" style="position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 20%; text-align: left;">
+        <h3>Troupes Joueur 1</h3>
+        <ul id="player1-troop-info"></ul>
+    </div>
+
     <div class="grid">
     </div>
+
+    <div id="player2-info" style="position: absolute; right: 0; top: 50%; transform: translateY(-50%); width: 20%; text-align: right;">
+        <h3>Troupes Joueur 2</h3>
+        <ul id="player2-troop-info"></ul>
+    </div>
+
     <script>
         // Récupérer les positions des troupes depuis localStorage
         const troopPositions = JSON.parse(localStorage.getItem('troopPositions')) || {};
         const playerTroops = JSON.parse(localStorage.getItem('playerTroops')) || {};
+
+        const player1Info = document.getElementById('player1-troop-info');
+        const player2Info = document.getElementById('player2-troop-info');
+
+        // Afficher les troupes et leurs positions pour chaque joueur
+        Object.entries(troopPositions).forEach(([position, troopId]) => {
+            const troopName = playerTroops[troopId];
+            const listItem = document.createElement('li');
+            listItem.textContent = `${troopName} en position ${position}`;
+
+            if (troopId.startsWith('player1')) {
+                player1Info.appendChild(listItem);
+            } else if (troopId.startsWith('player2')) {
+                player2Info.appendChild(listItem);
+            }
+        });
 
         // Initialisation de la grille
         const grid = document.querySelector('.grid');
