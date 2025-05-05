@@ -14,22 +14,24 @@ TODO :
 <body>
     <h1>Mode Combat Multijoueur</h1>
 
-    <div id="player1-selection">
-        <h2>Joueur 1</h2>
-        <label for="player1-faction">Choisissez votre faction :</label>
-        <select id="player1-faction">
-            <option value="rome">Rome</option>
-            <option value="carthage">Carthage</option>
-        </select>
-    </div>
-
-    <div id="player2-selection">
-        <h2>Joueur 2</h2>
-        <label for="player2-faction">Choisissez votre faction :</label>
-        <select id="player2-faction">
-            <option value="rome">Rome</option>
-            <option value="carthage">Carthage</option>
-        </select>
+    <div id="players-container">
+        <div id="player1-selection">
+            <h2>Joueur 1</h2>
+            <label for="player1-faction">Choisissez votre faction :</label>
+            <select id="player1-faction">
+                <option value="rome">Rome</option>
+                <option value="carthage">Carthage</option>
+            </select>
+        </div>
+    
+        <div id="player2-selection">
+            <h2>Joueur 2</h2>
+            <label for="player2-faction">Choisissez votre faction :</label>
+            <select id="player2-faction">
+                <option value="rome">Rome</option>
+                <option value="carthage">Carthage</option>
+            </select>
+        </div>
     </div>
 
     <button id="start-game" onclick="startGame()">Lancer</button>
