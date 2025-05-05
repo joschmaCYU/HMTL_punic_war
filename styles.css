@@ -113,7 +113,7 @@ h1, h2 {
 
 #player1-troop-list {
     position: absolute;
-    left: 0;
+    left: 20%;
     top: 50%;
     transform: translateY(-50%);
     width: 20%;
@@ -125,7 +125,7 @@ h1, h2 {
 
 #player2-troop-list {
     position: absolute;
-    right: 0;
+    right: 20%;
     top: 50%;
     transform: translateY(-50%);
     width: 20%;
