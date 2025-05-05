@@ -137,16 +137,7 @@ function getPlayerLabel(code) {
 
 // ------------------ START COMBAT ------------------
 
-function setupCombatButton() {
-    document.getElementById('start-combat').addEventListener('click', () => {
-        const params = new URLSearchParams();
-        params.set('troopPositions', JSON.stringify(troopPositions));
-        params.set('playerTroops', JSON.stringify(playerTroops));
-        window.location.href = `page_combat.html?${params.toString()}`;
-    });
-}
 
 // ------------------ RUN ------------------
 
 initialisation()
-setupCombatButton();
