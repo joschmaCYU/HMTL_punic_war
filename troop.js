@@ -3,117 +3,148 @@ const factions = {
     carthage: ['Éléphant de guerre', 'Lancier', 'Frondeur']
 };
 
-const playerTroops = {
-    player1: [],
-    player2: []
-};
+const playerTroops = { player1: [], player2: [] };
+const selectedFactions = { player1: null, player2: null };
+const troopPositions = {};
 
-const selectedFactions = {
-    player1: null,
-    player2: null
-};
-
-const troopPositions = {}; // Objet pour stocker les positions des troupes
-
-// Initialisation de l'échiquier
 const boardGrid = document.getElementById('board-grid');
 boardGrid.style.gridTemplateColumns = 'repeat(10, 60px)';
 boardGrid.style.gridTemplateRows = 'repeat(10, 60px)';
 
-for (let row = 0; row < 10; row++) {
-    for (let col = 0; col < 10; col++) {
-        const cell = document.createElement('div');
-        cell.classList.add('grid-cell');
-        cell.dataset.row = row;
-        cell.dataset.col = col;
+// ------------------ INITIALISATION ------------------
 
-        // Restriction de placement : Joueur 1 à gauche, Joueur 2 à droite
-        if (col < 5) {
-            cell.dataset.allowedPlayer = 'player1';
-        } else {
-            cell.dataset.allowedPlayer = 'player2';
+function initialisation() {
+    initFromURL();
+    initTroopLists();
+    initBoard();
+}
+
+function initFromURL() {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('player1Faction') in factions) selectedFactions.player1 = params.get('player1Faction');
+    if (params.get('player2Faction') in factions) selectedFactions.player2 = params.get('player2Faction');
+}
+
+function initTroopLists() {
+    initTroopList('player1', selectedFactions.player1);
+    initTroopList('player2', selectedFactions.player2);
+}
+
+function initBoard() {
+    for (let row = 0; row < 10; row++) {
+        for (let col = 0; col < 10; col++) {
+            boardGrid.appendChild(createCell(row, col));
         }
-
-        cell.addEventListener('dragover', (event) => {
-            event.preventDefault();
-        });
-
-        cell.addEventListener('drop', (event) => {
-            event.preventDefault();
-            const troopId = event.dataTransfer.getData('text/plain');
-            const troopElement = document.getElementById(troopId);
-            const allowedPlayer = cell.dataset.allowedPlayer;
-
-            if (troopElement && !cell.hasChildNodes() && troopElement.dataset.player === allowedPlayer) {
-                cell.appendChild(troopElement.cloneNode(true));
-                troopElement.style.width = '60px';
-                troopElement.style.height = '60px';
-
-                // Enregistrer la position de la troupe
-                const positionKey = `${row}-${col}`;
-                troopPositions[positionKey] = troopId;
-                console.log(`Troupe ${troopId} placée en position ${positionKey}`);
-            }
-        });
-
-        boardGrid.appendChild(cell);
     }
 }
 
-// Fonction pour récupérer les positions des troupes
-function getTroopPositions() {
-    return troopPositions;
-}
+// ------------------ TROOPS ------------------
 
-// Gestion du drag-and-drop
-function initializeTroops(player, faction) {
-    const troopList = document.querySelector(`#${player}-troop-list`);
-    troopList.innerHTML = '';
-    troopList.style.display = 'flex';
-    troopList.style.flexDirection = 'column';
-    troopList.style.alignItems = player === 'player1' ? 'flex-start' : 'flex-end';
+function initTroopList(player, faction) {
+    const list = document.getElementById(`${player}-troop-list`);
+    list.innerHTML = '';
+    list.style.display = 'flex';
+    list.style.flexDirection = 'column';
+    list.style.alignItems = player === 'player1' ? 'flex-start' : 'flex-end';
 
-    factions[faction].forEach((troop, index) => {
-        const troopItem = document.createElement('div');
-        troopItem.classList.add('troop-item');
-        troopItem.id = `${player}-troop-${index}`;
-        troopItem.draggable = true;
-        troopItem.dataset.player = player;
-        troopItem.textContent = troop;
-        troopItem.style.width = '60px';
-        troopItem.style.height = '60px';
-        troopItem.addEventListener('dragstart', (event) => {
-            event.dataTransfer.setData('text/plain', event.target.id);
-        });
-        troopList.appendChild(troopItem);
+    factions[faction].forEach((name, index) => {
+        list.appendChild(createTroop(player, name, index));
     });
-
-    localStorage.setItem('troopPositions', JSON.stringify(troopPositions));
-    alert('Positions des troupes : ' + JSON.stringify(troopPositions));
 }
 
-// Mise à jour dynamique en fonction des factions choisies par les joueurs
-const urlParams = new URLSearchParams(window.location.search);
-const player1Faction = urlParams.get('player1Faction');
-const player2Faction = urlParams.get('player2Faction');
-
-if (player1Faction && factions[player1Faction]) {
-    selectedFactions.player1 = player1Faction;
+function createTroop(player, name, index) {
+    const div = document.createElement('div');
+    div.className = 'troop-item';
+    div.id = `${player}-troop-${index}`;
+    div.draggable = true;
+    div.dataset.player = player;
+    div.textContent = name;
+    setSize(div, 60, 60);
+    div.addEventListener('dragstart', handleDragStart);
+    return div;
 }
-if (player2Faction && factions[player2Faction]) {
-    selectedFactions.player2 = player2Faction;
+
+// ------------------ BOARD CELLS ------------------
+
+function createCell(row, col) {
+    const cell = document.createElement('div');
+    cell.className = 'grid-cell';
+    cell.dataset.row = row;
+    cell.dataset.col = col;
+    cell.dataset.allowedPlayer = col < 5 ? 'player1' : 'player2';
+
+    cell.addEventListener('dragover', (e) => e.preventDefault());
+    cell.addEventListener('drop', (e) => handleDrop(e, row, col, cell));
+
+    return cell;
 }
 
-initializeTroops('player1', selectedFactions.player1);
-initializeTroops('player2', selectedFactions.player2);
+// ------------------ EVENT HANDLERS ------------------
 
-// Ajustement des alignements
-const player1TroopList = document.querySelector('#player1-troop-list');
-const player2TroopList = document.querySelector('#player2-troop-list');
+function handleDragStart(e) {
+    e.dataTransfer.setData('text/plain', e.target.id);
+}
 
-player1TroopList.style.alignItems = 'flex-end'; // Joueur 1 à droite
-player2TroopList.style.alignItems = 'flex-start'; // Joueur 2 à gauche
+function handleDrop(e, row, col, cell) {
+    e.preventDefault();
+    const troopId = e.dataTransfer.getData('text/plain');
+    const troop = document.getElementById(troopId);
+    const player = cell.dataset.allowedPlayer;
 
-document.getElementById('start-combat').addEventListener('click', () => {
-});
+    if (!troop || cell.hasChildNodes() || troop.dataset.player !== player) return;
 
+    const clone = troop.cloneNode(true);
+    setSize(clone, 60, 60);
+    cell.appendChild(clone);
+
+    const pos = `${row}-${col}`;
+    troopPositions[pos] = troopId;
+
+    updateTroopTable(getPlayerLabel(player), troop.textContent, pos);
+}
+
+// ------------------ TABLE ------------------
+
+function updateTroopTable(player, name, position) {
+    const row = document.createElement('tr');
+    row.innerHTML = `<td>${player}</td><td>${name}</td><td>${position}</td>`;
+    document.getElementById('troop-table-body').appendChild(row);
+}
+
+function updateTroopTableFromPositions() {
+    const body = document.getElementById('troop-table-body');
+    body.innerHTML = '';
+    Object.entries(troopPositions).forEach(([pos, id]) => {
+        const troop = document.getElementById(id);
+        const name = troop?.textContent || 'Inconnu';
+        const player = getPlayerLabel(id.startsWith('player1') ? 'player1' : 'player2');
+        updateTroopTable(player, name, pos);
+    });
+}
+
+// ------------------ UTILS ------------------
+
+function setSize(el, w, h) {
+    el.style.width = `${w}px`;
+    el.style.height = `${h}px`;
+}
+
+function getPlayerLabel(code) {
+    return code === 'player1' ? 'Joueur 1' : 'Joueur 2';
+}
+
+// ------------------ START COMBAT ------------------
+
+function setupCombatButton() {
+    document.getElementById('start-combat').addEventListener('click', () => {
+        const params = new URLSearchParams();
+        params.set('troopPositions', JSON.stringify(troopPositions));
+        params.set('playerTroops', JSON.stringify(playerTroops));
+        window.location.replace(`page_combat.html?${params.toString()}`);
+    });
+}
+
+// ------------------ RUN ------------------
+
+initialisation()
+setupCombatButton();
