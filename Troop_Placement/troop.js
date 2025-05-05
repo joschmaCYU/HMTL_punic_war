@@ -101,13 +101,12 @@ function handleDrop(e, row, col, cell) {
     troopPositions[pos] = troopId;
 
     updateTroopTable(getPlayerLabel(player), troop.textContent, pos);
-    saveNextQuery();
 }
 
-function saveNextQuery() {
+function getTroopQuery() {
     const query = Object.entries(troopPositions).map(([pos, id]) => {
         const [player, index] = id.split('-').slice(0, 2);
-        return `${player[6]}${index}:${pos}`;
+        return `${player[6]}:${pos}`;
     }).join(',');
     console.log(`Query: ${query}`);
     return query;
@@ -127,8 +126,6 @@ function updateTroopTableFromPositions() {
         const player = getPlayerLabel(id.startsWith('player1') ? 'player1' : 'player2');
         console.log(`Position: ${pos}, ID: ${id}, Player: ${player}, Name: ${name}`);
         updateTroopTable(player, name, pos);
-        
-        saveNextQuery()
     });
 }
 
@@ -146,7 +143,7 @@ function getPlayerLabel(code) {
 // ------------------ START COMBAT ------------------
 function startCombat() {
     //const troop_placement = document.getElementById('updateTroopTable').value;
-    window.location.href = `../Combat/page_combat.html?troop_placement=${troop_placement}`;
+    window.location.href = `../Combat/page_combat.html?troop_placement=${getTroopQuery()}`;
     console.log(`Démarrer le combat avec les troupes : ${troop_placement}`);
 }
 
