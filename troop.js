@@ -140,9 +140,8 @@ function startCombat() {
     const troop_placement = document.getElementById('updateTroopTable').value;
 
     // Redirige vers la page de placement des troupes avec les factions sélectionnées
-    window.location.href = `troop_placement.html?troop_placement=${troop_placement}`;
-    console.log(`Démarrer le combat avec les troupes : ${troop_placement}`
-    );
+    window.location.href = `page_combat.html?troop_placement=${troop_placement}`;
+    console.log(`Démarrer le combat avec les troupes : ${troop_placement}`);
     
 }
 
