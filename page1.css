@@ -1,0 +1,31 @@
+
+.start-game {
+    width: 166px;
+    height: 62px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 17px;
+    border-radius: 1rem;
+    border: none;
+    background: #8b5e3c; /* brun/terre cuite */
+    transition: 0.1s; 
+    position: relative;
+}
+
+.start-game::before {
+    content: '';
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 10% 20%, #e3b778 20%, #c97b49 100%);
+    filter: blur(15px);
+    z-index: -1;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.start-game:hover {
+    transform: scale(0.9);
+    background: radial-gradient(circle at 10% 20%, #e3b778 20%, #c97b49 100%);
+    transition: 0.5s;
+}
