@@ -13,6 +13,12 @@ boardGrid.style.gridTemplateRows = 'repeat(10, 60px)';
 
 // ------------------ INITIALISATION ------------------
 
+function initialisation() {
+    initFromURL();
+    initTroopLists();
+    initBoard();
+}
+
 function initFromURL() {
     const params = new URLSearchParams(window.location.search);
     if (params.get('player1Faction') in factions) selectedFactions.player1 = params.get('player1Faction');
@@ -140,7 +146,5 @@ function setupCombatButton() {
 
 // ------------------ RUN ------------------
 
-initFromURL();
-initTroopLists();
-initBoard();
+initialisation()
 setupCombatButton();
