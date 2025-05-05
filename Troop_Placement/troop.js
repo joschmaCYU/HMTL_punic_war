@@ -137,18 +137,15 @@ function getPlayerLabel(code) {
 }
 
 // ------------------ START COMBAT ------------------
+function startCombat() {
+    const troop_placement = document.getElementById('updateTroopTable').value;
 
-function setupCombatButton() {
-    document.getElementById('start-combat').addEventListener('click', () => {
-        const params = new URLSearchParams();
-        params.set('troopPositions', JSON.stringify(troopPositions));
-        params.set('playerTroops', JSON.stringify(playerTroops));
-        console.log('Troop positions:', params.toString());
-        window.location.href = `../Combat/page_combat.html?${params.toString()}`;
-    });
+    // Redirige vers la page de placement des troupes avec les factions sélectionnées
+    window.location.href = `../Combat/page_combat.html?troop_placement=${troop_placement}`;
+    console.log(`Démarrer le combat avec les troupes : ${troop_placement}`);
+    
 }
 
 // ------------------ RUN ------------------
 
 initialisation()
-setupCombatButton();
