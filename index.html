@@ -1,7 +1,4 @@
-<!-- Page principale permet de choisir son camp (Pas de JS)
-TODO :
-- Se renommer
--->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,6 +16,7 @@ TODO :
         }
     </style>
 </head>
+
 <body>
     <h1>Mode Combat Multijoueur</h1>
     <img src="image/epais.png" alt="" width="300">
@@ -44,14 +42,8 @@ TODO :
 
     <button id="start-game" onclick="startGame()">Lancer</button>
 
-    <script>
-        function startGame() {
-            const player1Faction = document.getElementById('player1-faction').value;
-            const player2Faction = document.getElementById('player2-faction').value;
+    <script src="page1.js"></script>
 
-            // Redirige vers la page de placement des troupes avec les factions sélectionnées
-            window.location.href = `Troop_Placement/troop_placement.html?player1Faction=${player1Faction}&player2Faction=${player2Faction}`;
-        }
-    </script>
+   
 </body>
 </html>
