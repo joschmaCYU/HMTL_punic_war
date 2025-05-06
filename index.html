@@ -18,29 +18,10 @@ TODO :
         background-color: #f5f0e6;
         }
     </style>
-    <script src="three.min.js"></script>
-    <script>
-        let scene, camera, renderer;
-
-        function init() {
-            scene = new THREE.scene();
-            scene.background = new THREE.Color(0xdddddd);
-
-            camera = new THREE.PerspectiveCamera(40,window.innerWidth/window.in)
-            
-            hilght = new THREE.AmbientLight (0x404040,100);
-            scene.add(hilght);
-
-            renderer = new THREE.WebGLRenderer({antialias:true});
-            renderer.setSize(window.innerWidth,window.innerHeight);
-            document.body.appendChild(renderer.domElement);
-        }
-    </script>
-
 </head>
 <body>
     <h1>Mode Combat Multijoueur</h1>
-
+    <img src="image/epais.png" alt="" width="300">
     <div id="players-container">
         <div id="player1-selection">
             <h2>Joueur 1</h2>
