@@ -1,5 +1,5 @@
 const factions = {
-    rome: ['Légionnaire', 'Archer', 'Cavalier'],
+    rome: ['légionnaire', 'Archer', 'Cavalier'],
     carthage: ['Éléphant de guerre', 'Lancier', 'Frondeur']
 };
 
@@ -52,16 +52,17 @@ function initTroopList(player, faction) {
     });
 }
 
-function createTroop(player, name, index) {
-    const div = document.createElement('div');
-    div.className = 'troop-item';
-    div.id = `${player}-troop-${index}`;
-    div.draggable = true;
-    div.dataset.player = player;
-    div.textContent = name;
-    setSize(div, 60, 60);
-    div.addEventListener('dragstart', handleDragStart);
-    return div;
+function createTroop(player, name, index,) {
+    const img = document.createElement('img');
+    img.className = 'troop-item';
+    img.src = `../image/${name}.png`;
+    img.id = `${player}-troop-${index}`;
+    img.draggable = true;
+    img.dataset.player = player;
+    img.textContent = name;
+    setSize(img, 60, 60);
+    img.addEventListener('dragstart', handleDragStart);
+    return img;
 }
 
 // ------------------ BOARD CELLS ------------------
@@ -101,6 +102,8 @@ function handleDrop(e, row, col, cell) {
     troopPositions[pos] = troopId;
 
     updateTroopTable(getPlayerLabel(player), troop.textContent, pos);
+
+    console.log(`Position: ${pos}, ID: ${troopId}, Player: ${player}`);
 }
 
 function getTroopQuery() {
@@ -109,7 +112,7 @@ function getTroopQuery() {
         return `${player[6]}:${pos}`;
     }).join(',');
     console.log(`Query: ${query}`);
-    return query;
+    return query;   
 }
 
 // ------------------ TABLE ------------------
