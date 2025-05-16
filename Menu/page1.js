@@ -1,11 +1,11 @@
 
 function startGame() {
-    const player1Faction = document.getElementById('player1-faction').value;
-    const player2Faction = document.getElementById('player2-faction').value;
+    const player1Faction = factions[playerSelections.player1].factionName;
+    const player2Faction = factions[playerSelections.player2].factionName;
 
-    // Redirige vers la page de placement des troupes avec les factions sélectionnées
     window.location.href = `Troop_Placement/page2.html?player1Faction=${player1Faction}&player2Faction=${player2Faction}`;
 }
+
 
 const factions = [
     { factionName: "rome", img: "image/bouclier_rouge.png" },
