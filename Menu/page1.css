@@ -43,16 +43,19 @@ body {
 
 button {
     padding: 10px 15px;
-    background-color: #007bff;
+    background-color: #ed9c4b;
     color: white;
     border: none;
-    border-radius: 8px;
+    border-radius: 20px;
     cursor: pointer;
     font-weight: bold;
 }
 
 button:hover {
-    background-color: #0056b3;
+    background-color: #d76f3e;
+    transform: scale(0.9);
+    background: radial-gradient(circle at 10% 20%, #e3b778 20%, #c97b49 100%);
+    transition: 0.5s;
 }
 
 
