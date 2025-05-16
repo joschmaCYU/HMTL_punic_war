@@ -43,11 +43,18 @@
         <div id="player2-selection">
             <h2>Joueur 2</h2>
             <label for="player2-faction">Choisissez votre faction :</label>
-            <select id="player2-faction">
-                <option value="rome">Rome</option>
-                <option value="carthage">Carthage</option>
-            </select>
-        </div>
+            <p>Choisissez votre faction :</p>
+            
+            <div class="faction-selector" id="faction1-selector">
+              <button class="arrow left" onclick="prevFaction('player1')">←</button>
+              
+              <img id="player1-image" src="image/bouclier_rouge.png" alt="Faction" width="100">
+              
+              <button class="arrow right" onclick="nextFaction('player1')">→</button>
+            </div>
+            
+            <button onclick="validateFaction('player1')">Valider</button>
+          </div>
     </div>
 
     <button id="start-game" onclick="startGame()">Lancer</button>
