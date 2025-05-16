@@ -4,27 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Grille 10x10</title>
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f4f4f4;
-        }   
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(10, 1fr);
-            grid-template-rows: repeat(10, 1fr);
-            width: 500px;
-            height: 500px;
-            border: 1px solid #ccc;
-        }
-        .cell {
-            border: 1px solid transparent; /* Invisible borders */
-        }
-    </style>
+    <link rel="stylesheet" href="combat.css">
 </head>
 <body>
     <div id="player1-info" style="position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 20%; text-align: left;">
@@ -40,7 +20,7 @@
         <ul id="player2-troop-info"></ul>
     </div>
 
-    <button id="previous-page" onclick="window.location.href = 'troop_placement.html'">Page Précédente</button>
+    <button id="previous-page" onclick="window.location.href = '../Troop_Placement/page2.html'">Page Précédente</button>
 
     <script src="page3.js"></script>
 </body>

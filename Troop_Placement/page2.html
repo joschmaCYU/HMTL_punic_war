@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drag and Drop Troop Placement</title>
+    <link rel="stylesheet" href="../global.css">
+</head>
+<body>
+    <h1>Choisissez et placez vos soldats</h1>
+
+    <div id="troop-selection">
+        <h2>Sélectionnez vos troupes</h2>
+        <div id="player1-troop-list" class="troop-list"></div>
+        <div id="player2-troop-list" class="troop-list"></div>
+    </div>
+
+    <div id="game-board">
+        <h2>Plateau de jeu</h2>
+        <div id="board-grid" class="grid"></div>
+    </div>
+
+
+    <button id="return-home" onclick="window.location.href = '../index.html'">Retour à la page de base</button>
+    <button id="start-combat" onclick="startCombat()" onclick="window.location.href = '../Combat/page_combat.html'">Lancer le Combat</button>
+
+    <script src="troop.js"></script>
+</body>
+</html>

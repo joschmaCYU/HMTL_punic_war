@@ -1,5 +1,5 @@
-import Grid from "./Grid.js";
-import Unit from "./Unit.js";
+//import Grid from "./Grid.js"; YA PAS 
+import Unit from "./GlobalUnit.js";
 
 class PlacementInterface {
     constructor(grid, playerUnits) {
