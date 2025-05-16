@@ -19,25 +19,37 @@
 
 <body>
     <h1>Mode Combat Multijoueur</h1>
-    <img src="image/epais.png" alt="" width="300">
     <div id="players-container">
         <div id="player1-selection">
             <h2>Joueur 1</h2>
-            <label for="player1-faction">Choisissez votre faction :</label>
-            <select id="player1-faction">
-                <option value="rome">Rome</option>
-                <option value="carthage">Carthage</option>
-            </select>
+            <p>Choisissez votre faction :</p>
+            
+            <div class="faction-selector" id="faction1-selector">
+              <button class="arrow left" onclick="prevFaction('player1')">←</button>
+              
+              <img id="player1-image" src="image/bouclier_rouge.png" alt="Faction" width="200">
+              
+              <button class="arrow right" onclick="nextFaction('player1')">→</button>
+            </div>
+          </div>
+          
+    <div id="colonne-milieu">
+        
+        <img src="image/epais.png" alt="" width="300">
+    </div>
+    <div id="player2-selection">
+        <h2>Joueur 2</h2>
+        <p>Choisissez votre faction :</p>
+      
+        <div class="faction-selector" id="faction2-selector">
+          <button class="arrow left" onclick="prevFaction('player2')">←</button>
+      
+          <img id="player2-image" src="image/bouclier_bleu.png" alt="Faction" width="200">
+      
+          <button class="arrow right" onclick="nextFaction('player2')">→</button>
         </div>
-    
-        <div id="player2-selection">
-            <h2>Joueur 2</h2>
-            <label for="player2-faction">Choisissez votre faction :</label>
-            <select id="player2-faction">
-                <option value="rome">Rome</option>
-                <option value="carthage">Carthage</option>
-            </select>
-        </div>
+      </div>
+      
     </div>
 
     <button id="start-game" onclick="startGame()">Lancer</button>

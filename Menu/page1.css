@@ -3,28 +3,79 @@ body {
     font-family: 'Cinzel', serif;
     background-color: #f5f0e6;
     margin-top: 120px;
+    background-image: url('../image/4455.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+
 }
+
 
 #players-container {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: flex-start;
-    gap: 50px; /* espace entre les deux */
-    margin-top: 20px;
+    width: 100%;
+    padding: 0 50px;
+    box-sizing: border-box;
+    margin-top: 60px; 
 }
 
 #player1-selection,
 #player2-selection {
-    width: 250px; /* largeur fixe pour qu'ils puissent se placer côte à côte */
+    width: 250px;
+    height: 400px; /* hauteur fixe */
     padding: 20px;
-    border-radius: 1rem;
-    background-color: #f9f9f9;
+    border-radius: 3rem;
+    background-color: #89898981;
     border: 2px solid #ccc;
+    
 }
 
+.faction-selector {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.arrow {
+    font-size: 15px;
+    padding: 20px 1px;
+    cursor: pointer;
+}
+
+button {
+    padding: 10px 15px;
+    background-color: #cdc9c5;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+button:hover {
+    background-color: #a98574;
+    transform: scale(0.9);
+    background: radial-gradient(circle at 10% 20%, #a38e70 20%, #e9ad87 100%);
+    transition: 0.5s;
+}
+
+
+
+
+#colonne-milieu {
+    width: 300px;
+    background-color: transparent;
+    border: none;
+    padding-top: 5px;
+}
+
+
 #start-game {
-    width: 166px;
-    height: 62px;
+    width: 200px;
+    height: 70px;
     cursor: pointer;
     color: #fff;
     font-size: 17px;
@@ -32,8 +83,8 @@ body {
     border: none;
     background: #8b5e3c; /* brun/terre cuite */
     transition: 0.1s; 
-    position: fixed;
-    bottom: 350px; /* distance depuis le bas de l’écran */
+    position: relative;
+    bottom: 100px; /* distance depuis le bas de l’écran */
     align-content: center; /* position horizontale au centre */
     z-index: 10;
 }
