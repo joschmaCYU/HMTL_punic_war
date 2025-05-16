@@ -56,7 +56,7 @@ body {
     transition: 0.5s;
 }
 
-/* Styles spécifiques pour les factions */
+
 select {
     font-size: 16px;
     padding: 8px;
@@ -64,20 +64,3 @@ select {
     transition: background-color 0.3s ease, padding 0.3s ease;
 }
 
-.rome {
-    background-color: red; /* Rouge pour Rome */
-    color: white;
-}
-
-.carthage {
-    background-color: blue; /* Bleu pour Carthage */
-    color: white;
-}
-
-.rome-padding {
-    padding: 12px; /* Padding spécifique pour Rome */
-}
-
-.carthage-padding {
-    padding: 16px; /* Padding spécifique pour Carthage */
-}
