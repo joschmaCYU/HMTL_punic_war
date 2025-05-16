@@ -3,6 +3,10 @@ body {
     font-family: 'Cinzel', serif;
     background-color: #f5f0e6;
     margin-top: 120px;
+    background-image: url('../image/4455.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+
 }
 
 
@@ -21,8 +25,8 @@ body {
     width: 250px;
     height: 400px; /* hauteur fixe */
     padding: 20px;
-    border-radius: 1rem;
-    background-color: #f9f9f9;
+    border-radius: 3rem;
+    background-color: #89898981;
     border: 2px solid #ccc;
     
 }
@@ -36,25 +40,25 @@ body {
 }
 
 .arrow {
-    font-size: 24px;
-    padding: 5px 10px;
+    font-size: 15px;
+    padding: 20px 1px;
     cursor: pointer;
 }
 
 button {
     padding: 10px 15px;
-    background-color: #ed9c4b;
+    background-color: #cdc9c5;
     color: white;
     border: none;
-    border-radius: 20px;
+    border-radius: 10px;
     cursor: pointer;
     font-weight: bold;
 }
 
 button:hover {
-    background-color: #d76f3e;
+    background-color: #a98574;
     transform: scale(0.9);
-    background: radial-gradient(circle at 10% 20%, #e3b778 20%, #c97b49 100%);
+    background: radial-gradient(circle at 10% 20%, #a38e70 20%, #e9ad87 100%);
     transition: 0.5s;
 }
 
