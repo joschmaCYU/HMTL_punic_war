@@ -1,51 +1,50 @@
-  // Récupérer les positions des troupes depuis localStorage
-        const troopPositions = JSON.parse(localStorage.getItem('troopPositions')) || {};
-        const playerTroops = JSON.parse(localStorage.getItem('playerTroops')) || {};
+window.onload = function() {
+    const params = new URLSearchParams(window.location.search);
+    const placement = params.get('troop_placement');
+    if (!placement) return;
 
-        const player1Info = document.getElementById('player1-troop-info');
-        const player2Info = document.getElementById('player2-troop-info');
+    // Correspondance ID -> nom image
+    const idToName = {
+        1: 'légionnaire',
+        2: 'Archer',
+        3: 'Cavalier',
+        4: 'Éléphant de guerre',
+        5: 'Lancier',
+        6: 'Frondeur'
+    };
 
-        // Afficher les troupes et leurs positions pour chaque joueur
-        Object.entries(troopPositions).forEach(([position, troopId]) => {
-            const troopName = playerTroops[troopId];
-            const listItem = document.createElement('li');
-            listItem.textContent = `${troopName} en position ${position}`;
+    // Crée la grille 10x10
+    const grid = document.querySelector('.grid');
+    grid.innerHTML = '';
+    for (let i = 0; i < 100; i++) {
+        const cell = document.createElement('div');
+        cell.className = 'cell';
+        grid.appendChild(cell);
+    }
 
-            if (troopId.startsWith('player1')) {
-                player1Info.appendChild(listItem);
-            } else if (troopId.startsWith('player2')) {
-                player2Info.appendChild(listItem);
-            }
-        });
+    // Place chaque troupe
+    placement.split(',').forEach(entry => {
+        // Format: joueur:row-col:id
+        const [player, pos, id] = entry.split(':');
+        let [row, col] = pos.split('-').map(Number);
 
-        // Initialisation de la grille
-        const grid = document.querySelector('.grid');
-        for (let row = 0; row < 10; row++) {
-            for (let col = 0; col < 10; col++) {
-                const cell = document.createElement('div');
-                cell.classList.add('cell');
-                cell.dataset.row = row;
-                cell.dataset.col = col;
+        // Laisse une bande vide centrale (ex: colonnes 4 et 5)
+        if ((player === '1' && col >= 4) || (player === '2' && col <= 5)) return;
 
-                // Vérifier si une troupe est placée sur cette case
-                const positionKey = `${row}-${col}`;
-                if (troopPositions[positionKey]) {
-                    const troopId = troopPositions[positionKey];
-                    const troopName = playerTroops[troopId];
+        const name = idToName[parseInt(id, 10)];
+        if (!name) return;
 
-                    // Ajouter une représentation visuelle de la troupe
-                    const troopElement = document.createElement('div');
-                    troopElement.textContent = troopName;
-                    troopElement.style.backgroundColor = troopId.startsWith('player1') ? '#007BFF' : '#FF5733';
-                    troopElement.style.color = 'white';
-                    troopElement.style.textAlign = 'center';
-                    troopElement.style.fontSize = '12px';
-                    troopElement.style.padding = '5px';
-                    troopElement.style.borderRadius = '5px';
+        // Calcul index dans la grille
+        const cellIndex = row * 10 + col;
+        const cell = grid.children[cellIndex];
 
-                    cell.appendChild(troopElement);
-                }
-
-                grid.appendChild(cell);
-            }
-        }
+        // Ajoute l'image dans la cellule
+        const img = document.createElement('img');
+        img.src = `../image/${name}.png`;
+        img.alt = name;
+        img.className = 'troop-item';
+        img.style.width = '100%';
+        img.style.height = '100%';
+        cell.appendChild(img);
+    });
+};
