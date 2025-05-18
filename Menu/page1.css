@@ -2,7 +2,7 @@
 body {
     font-family: 'Cinzel', serif;
     background-color: #f5f0e6;
-    margin-top: 120px;
+    margin-top: 50px;
     background-image: url('../image/4455.jpg');
     background-size: cover;
     background-repeat: no-repeat;
@@ -27,7 +27,7 @@ body {
     padding: 20px;
     border-radius: 3rem;
     background-color: #89898981;
-    border: 2px solid #ccc;
+    border: 2px solid #cccccc7c;
     
 }
 
