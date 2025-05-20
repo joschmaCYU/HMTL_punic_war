@@ -2,6 +2,18 @@ const factions = {
     rome: ['légionnaire', 'Archer', 'Cavalier'],
     carthage: ['Éléphant de guerre', 'Lancier', 'Frondeur']
 };
+const TROOP_IDS = {
+    'légionnaire': 1,
+    'Archer': 2,
+    'Cavalier': 3,
+    'Éléphant de guerre': 4,
+    'Lancier': 5,
+    'Frondeur': 6
+};
+
+function getTroopIdByName(name) {
+    return TROOP_IDS[name] ?? 0; // 0 si non trouvé
+}
 
 const playerTroops = { player1: [], player2: [] };
 const selectedFactions = { player1: null, player2: null };
@@ -86,7 +98,7 @@ function handleDragStart(e) {
     e.dataTransfer.setData('text/plain', e.target.id);
 }
 
-function handleDrop(e, row, col, cell) {
+function handleDrop(e, row, col, cell,) {
     e.preventDefault();
     const troopId = e.dataTransfer.getData('text/plain');
     const troop = document.getElementById(troopId);
@@ -105,11 +117,13 @@ function handleDrop(e, row, col, cell) {
 
     console.log(`Position: ${pos}, ID: ${troopId}, Player: ${player}`);
 }
-
 function getTroopQuery() {
     const query = Object.entries(troopPositions).map(([pos, id]) => {
-        const [player, index] = id.split('-').slice(0, 2);
-        return `${player[6]}:${pos}`;
+        const troop = document.getElementById(id);
+        const name = troop?.textContent || '';
+        const troopNumId = getTroopIdByName(name);
+        const [player] = id.split('-');
+        return `${player[6]}:${pos}:${troopNumId}`;
     }).join(',');
     console.log(`Query: ${query}`);
     return query;   
@@ -147,7 +161,7 @@ function getPlayerLabel(code) {
 function startCombat() {
     //const troop_placement = document.getElementById('updateTroopTable').value;
     window.location.href = `../Combat/page_combat.html?troop_placement=${getTroopQuery()}`;
-    console.log(`Démarrer le combat avec les troupes : ${troop_placement}`);
+    console.log(`Démarrer le combat avec les troupes : ${getTroopQuery}`);
 }
 
 // ------------------ RUN ------------------
