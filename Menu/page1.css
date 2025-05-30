@@ -2,7 +2,7 @@
 body {
     font-family: 'Cinzel', serif;
     background-color: #f5f0e6;
-    margin-top: 50px;
+    margin-top: 30px;
   
     background-size: cover;
     background-repeat: no-repeat;
@@ -15,7 +15,7 @@ body {
     justify-content: space-between;
     align-items: flex-start;
     width: 100%;
-    padding: 0 50px;
+    padding: 0 130px;
     box-sizing: border-box;
     margin-top: 60px; 
 }
@@ -25,8 +25,8 @@ body {
     width: 250px;
     height: 400px; /* hauteur fixe */
     padding: 20px;
-    border-radius: 3rem;
-    background-color: #89898981;
+    border-radius: 2.5rem;
+    background-color: #89898969;
     border: 2px solid #cccccc7c;
     
 }
@@ -47,7 +47,7 @@ body {
 
 button {
     padding: 10px 15px;
-    background-color: #cdc9c5;
+    background-color: #848281;
     color: white;
     border: none;
     border-radius: 10px;
@@ -56,9 +56,9 @@ button {
 }
 
 button:hover {
-    background-color: #a98574;
+    background-color: #d8d8d7;
     transform: scale(0.9);
-    background: radial-gradient(circle at 10% 20%, #a38e70 20%, #e9ad87 100%);
+    background: radial-gradient(circle at 10% 20%, #b0afae 20%, #afa59f 100%);
     transition: 0.5s;
 }
 
@@ -69,7 +69,7 @@ button:hover {
     width: 300px;
     background-color: transparent;
     border: none;
-    padding-top: 5px;
+    padding-top: 2px;
 }
 
 
@@ -103,7 +103,7 @@ button:hover {
 
 #start-game:hover {
     transform: scale(0.9);
-    background: radial-gradient(circle at 10% 20%, #e3b778 20%, #c97b49 100%);
+    background: radial-gradient(circle at 10% 20%, #957e5e 20%, #817b78 100%);
     transition: 0.5s;
 }
 
@@ -115,3 +115,22 @@ select {
     transition: background-color 0.3s ease, padding 0.3s ease;
 }
 
+.halo {
+    animation: glow 2s infinite alternate;
+    filter: drop-shadow(0 0 70px rgba(255, 255, 255, 0.2));
+  }
+  
+  @keyframes glow {
+    from {
+      filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.2));
+    }
+    to {
+      filter: drop-shadow(0 0 25px rgb(255, 255, 255));
+    }
+  }
+  
+.halo:hover {
+    transform: scale(1.0);
+    transition: 0.5s;
+   
+  }
