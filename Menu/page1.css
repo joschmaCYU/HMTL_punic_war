@@ -1,13 +1,25 @@
 /* Style général */
+
 body {
     font-family: 'Cinzel', serif;
-    background-color: #f5f0e6;
-    margin-top: 30px;
-  
+    margin-top: 130px;
+    background-image: url('image/fond.png');
+    background-color: #ebdcbd;
     background-size: cover;
     background-repeat: no-repeat;
-
+  
 }
+
+h1 {
+    margin-top: 55px;
+    text-align: center;
+    font-size: 3rem; /* ou 48px, ou 300% */
+  }
+
+.textejoueur {
+
+    font-size: 2.2rem; /* ou 48px, ou 300% */
+  }
 
 
 #players-container {
@@ -25,9 +37,9 @@ body {
     width: 250px;
     height: 400px; /* hauteur fixe */
     padding: 20px;
-    border-radius: 2.5rem;
-    background-color: #89898969;
-    border: 2px solid #cccccc7c;
+    border-radius: 2rem;
+    background-color: #ffe0e0a9;
+    border: 2px solid #96512c00;
     
 }
 
@@ -81,10 +93,10 @@ button:hover {
     font-size: 17px;
     border-radius: 1rem;
     border: none;
-    background: #8b5e3c; /* brun/terre cuite */
+    background: #be8b63; /* brun/terre cuite */
     transition: 0.1s; 
     position: relative;
-    bottom: 100px; /* distance depuis le bas de l’écran */
+    bottom: 0px; /* distance depuis le bas de l’écran */
     align-content: center; /* position horizontale au centre */
     z-index: 10;
 }
@@ -103,7 +115,7 @@ button:hover {
 
 #start-game:hover {
     transform: scale(0.9);
-    background: radial-gradient(circle at 10% 20%, #957e5e 20%, #817b78 100%);
+    background: radial-gradient(circle at 10% 20%, #c8a068 20%, #f3844c 100%);
     transition: 0.5s;
 }
 
@@ -134,3 +146,5 @@ select {
     transition: 0.5s;
    
   }
+
+  
