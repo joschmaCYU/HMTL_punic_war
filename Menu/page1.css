@@ -19,6 +19,7 @@ h1 {
 .textejoueur {
 
     font-size: 2.2rem; /* ou 48px, ou 300% */
+    text-align: center;
   }
 
 
@@ -96,7 +97,7 @@ button:hover {
     background: #be8b63; /* brun/terre cuite */
     transition: 0.1s; 
     position: relative;
-    bottom: 0px; /* distance depuis le bas de l’écran */
+
     align-content: center; /* position horizontale au centre */
     z-index: 10;
 }
