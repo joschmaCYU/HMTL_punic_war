@@ -1,13 +1,26 @@
 /* Style général */
+
 body {
     font-family: 'Cinzel', serif;
-    background-color: #f5f0e6;
-    margin-top: 120px;
-    background-image: url('../image/4455.jpg');
+    margin-top: 130px;
+    background-image: url('image/fond.png');
+    background-color: #ebdcbd;
     background-size: cover;
     background-repeat: no-repeat;
-
+  
 }
+
+h1 {
+    margin-top: 55px;
+    text-align: center;
+    font-size: 3rem; /* ou 48px, ou 300% */
+  }
+
+.textejoueur {
+
+    font-size: 2.2rem; /* ou 48px, ou 300% */
+    text-align: center;
+  }
 
 
 #players-container {
@@ -15,7 +28,7 @@ body {
     justify-content: space-between;
     align-items: flex-start;
     width: 100%;
-    padding: 0 50px;
+    padding: 0 300px;
     box-sizing: border-box;
     margin-top: 60px; 
 }
@@ -25,9 +38,9 @@ body {
     width: 250px;
     height: 400px; /* hauteur fixe */
     padding: 20px;
-    border-radius: 3rem;
-    background-color: #89898981;
-    border: 2px solid #ccc;
+    border-radius: 1.5rem;
+    background-color: #ffe0e0a9;
+    border: 2px solid #96512c00;
     
 }
 
@@ -47,7 +60,7 @@ body {
 
 button {
     padding: 10px 15px;
-    background-color: #cdc9c5;
+    background-color: #afafaf;
     color: white;
     border: none;
     border-radius: 10px;
@@ -56,9 +69,9 @@ button {
 }
 
 button:hover {
-    background-color: #a98574;
+    background-color: #d8d8d7;
     transform: scale(0.9);
-    background: radial-gradient(circle at 10% 20%, #a38e70 20%, #e9ad87 100%);
+    background: radial-gradient(circle at 10% 20%, #b0afae 20%, #afa59f 100%);
     transition: 0.5s;
 }
 
@@ -69,7 +82,7 @@ button:hover {
     width: 300px;
     background-color: transparent;
     border: none;
-    padding-top: 5px;
+    padding-top: 2px;
 }
 
 
@@ -81,10 +94,10 @@ button:hover {
     font-size: 17px;
     border-radius: 1rem;
     border: none;
-    background: #8b5e3c; /* brun/terre cuite */
+    background: #be8b63; /* brun/terre cuite */
     transition: 0.1s; 
     position: relative;
-    bottom: 100px; /* distance depuis le bas de l’écran */
+
     align-content: center; /* position horizontale au centre */
     z-index: 10;
 }
@@ -103,7 +116,7 @@ button:hover {
 
 #start-game:hover {
     transform: scale(0.9);
-    background: radial-gradient(circle at 10% 20%, #e3b778 20%, #c97b49 100%);
+    background: radial-gradient(circle at 10% 20%, #c8a068 20%, #f3844c 100%);
     transition: 0.5s;
 }
 
@@ -115,3 +128,24 @@ select {
     transition: background-color 0.3s ease, padding 0.3s ease;
 }
 
+.halo {
+    animation: glow 2s infinite alternate;
+    filter: drop-shadow(0 0 70px rgba(255, 255, 255, 0.2));
+  }
+  
+  @keyframes glow {
+    from {
+      filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.2));
+    }
+    to {
+      filter: drop-shadow(0 0 25px rgb(255, 255, 255));
+    }
+  }
+  
+.halo:hover {
+    transform: scale(1.0);
+    transition: 0.5s;
+   
+  }
+
+  
