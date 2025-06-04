@@ -100,8 +100,8 @@ h1, h2 {
 #board-grid {
     margin: 0 auto;
     position: relative;
-    width: 650px;
-    height: 650px;
+    width: 620px;
+    height: 620px;
     display: grid;
     grid-template-columns: repeat(10, 1fr);
     grid-template-rows: repeat(10, 1fr);
