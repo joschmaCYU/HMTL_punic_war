@@ -2,8 +2,8 @@
 
 body {
     font-family: 'Cinzel', serif;
-    margin-top: 130px;
-    background-image: url('image/fond.png');
+    margin-top: 180px;
+    background-image: url('image/Plan.png');
     background-color: #ebdcbd;
     background-size: cover;
     background-repeat: no-repeat;
@@ -11,7 +11,8 @@ body {
 }
 
 h1 {
-    margin-top: 55px;
+    margin-top: 70px;
+    margin-bottom: 5px;
     text-align: center;
     font-size: 3rem; /* ou 48px, ou 300% */
   }
