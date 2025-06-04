@@ -98,7 +98,6 @@ button:hover {
     background: #be8b63; /* brun/terre cuite */
     transition: 0.1s; 
     position: relative;
-
     align-content: center; /* position horizontale au centre */
     z-index: 10;
 }
