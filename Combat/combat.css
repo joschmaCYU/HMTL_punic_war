@@ -1,19 +1,4 @@
-body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-    background-color: #f4f4f4;
-}   
-.grid {
-    display: grid;
-    grid-template-columns: repeat(10, 1fr);
-    grid-template-rows: repeat(10, 1fr);
-    width: 500px;
-    height: 500px;
-    border: 1px solid #ccc;
+
+#battlefield {
+    margin: 40px auto;
 }
-.cell {
-    border: 1px solid transparent; /* Invisible borders */
-}   
