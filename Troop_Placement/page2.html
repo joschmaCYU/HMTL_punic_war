@@ -9,6 +9,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel&display=swap" rel="stylesheet">
 </head>
 <body>
+    <audio id="audio" loop>
+    <source src="../musique/TROUPE1.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+    document.addEventListener("click", function () {
+        document.getElementById("audio").play();
+    });
+</script>
     <h1>Placez vos soldats</h1>
 
     <div id="troop-selection">

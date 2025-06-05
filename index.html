@@ -26,6 +26,17 @@
 </head>
 
 <body>
+<audio id="audio" loop>
+    <source src="musique/MENU1.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+    document.addEventListener("click", function () {
+        document.getElementById("audio").play();
+    });
+</script>
+
+
     <h1>Rome VS Carthage</h1>
     <div id="players-container">
         <div id="player1-selection">

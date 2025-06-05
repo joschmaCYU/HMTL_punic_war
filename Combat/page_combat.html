@@ -6,7 +6,16 @@
     <title>Grille 10x10</title>
     <link rel="stylesheet" href="combat.css">
 </head>
-<body>
+<body>  
+     <audio id="audio" loop>
+    <source src="../musique/COMBAT1.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+    document.addEventListener("click", function () {
+        document.getElementById("audio").play();
+    });
+    </script>    
     <div id="player1-info" style="position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 20%; text-align: left;">
         <h3>Troupes Joueur 1</h3>
         <ul id="player1-troop-info"></ul>
