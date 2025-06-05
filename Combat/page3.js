@@ -13,38 +13,59 @@ window.onload = function() {
         6: 'Frondeur'
     };
 
-    // Crée la grille 10x10
-    const grid = document.querySelector('.grid');
-    grid.innerHTML = '';
-    for (let i = 0; i < 100; i++) {
-        const cell = document.createElement('div');
-        cell.className = 'cell';
-        grid.appendChild(cell);
-    }
+    // Création du conteneur principal centré
+    const container = document.createElement('div');
+    container.style.position = 'relative';
+    container.style.width = '1000px';
+    container.style.height = '800px';
+    container.style.background = '#f4f4f4';
+    container.id = 'battlefield';
+    container.style.margin = '40px auto';
+    container.style.display = 'block';
+    container.style.border = '2px solid #999';
+    document.body.appendChild(container);
 
-    // Place chaque troupe
+    // Placement des troupes
+    // Grille 10 colonnes, 5 à gauche, 5 à droite, 200px de gap au centre
+    const cellWidth = 80;  // (1000 - 200) / 10 = 80px
+    const cellHeight = 80; // 800 / 10 = 80px
+    const gap = 200;       // 200px de séparation centrale
+
     placement.split(',').forEach(entry => {
-        // Format: joueur:row-col:id
         const [player, pos, id] = entry.split(':');
-        let [row, col] = pos.split('-').map(Number);
-
-        // Laisse une bande vide centrale (ex: colonnes 4 et 5)
-        if ((player === '1' && col >= 4) || (player === '2' && col <= 5)) return;
-
+        const [row, col] = pos.split('-').map(Number);
         const name = idToName[parseInt(id, 10)];
         if (!name) return;
 
-        // Calcul index dans la grille
-        const cellIndex = row * 10 + col;
-        const cell = grid.children[cellIndex];
+        let left;
+        if (col <= 4) {
+            // Joueur 1, colonnes 0 à 4 (à gauche du gap)
+            left = col * cellWidth;
+        } else if (col >= 5 && col <= 9) {
+            // Joueur 2, colonnes 5 à 9 (à droite du gap)
+            left = (col - 5) * cellWidth + 5 * cellWidth + gap;
+        } else {
+            left = 0;
+        }
+        const top = row * cellHeight;
 
-        // Ajoute l'image dans la cellule
+        // Création de l'élément troupe
+        const troopDiv = document.createElement('div');
+        troopDiv.className = 'troop';
+        troopDiv.style.position = 'absolute';
+        troopDiv.style.left = `${left}px`;
+        troopDiv.style.top = `${top}px`;
+        troopDiv.style.width = `${cellWidth}px`;
+        troopDiv.style.height = `${cellHeight}px`;
+        troopDiv.style.zIndex = 2;
+
         const img = document.createElement('img');
         img.src = `../image/${name}.png`;
         img.alt = name;
-        img.className = 'troop-item';
         img.style.width = '100%';
         img.style.height = '100%';
-        cell.appendChild(img);
+        troopDiv.appendChild(img);
+
+        container.appendChild(troopDiv);
     });
-};
+}
