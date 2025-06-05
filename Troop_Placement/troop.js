@@ -87,6 +87,14 @@ function createCell(row, col) {
     cell.dataset.col = col;
     cell.dataset.allowedPlayer = col < 5 ? 'player1' : 'player2';
 
+    // Ajout du style pour la ligne rouge centrale
+    if (col === 4) {
+        cell.style.borderRight = '3px solid red';
+    }
+    if (col === 5) {
+        cell.style.borderLeft = '3px solid red';
+    }
+
     cell.addEventListener('dragover', (e) => e.preventDefault());
     cell.addEventListener('drop', (e) => handleDrop(e, row, col, cell));
 
@@ -113,7 +121,11 @@ function handleDrop(e, row, col, cell) {
     if (!troop || troop.dataset.player !== player) return;
 
     // Si la case contient déjà une troupe, refuse le drop
-    if (cell.hasChildNodes()) return;
+    if (cell.hasChildNodes())
+        {
+            cell.removeChild(cell.firstChild);
+        }
+         return;
 
     // Si la troupe vient d'une autre case du plateau, retire-la de l'ancienne case
     if (fromPos) {
@@ -154,24 +166,34 @@ function handleDragStart(e) {
     e.dataTransfer.setData('text/plain', e.target.id);
 }
 
-function handleDrop(e, row, col, cell,) {
+function handleDrop(e, row, col, cell) {
     e.preventDefault();
     const troopId = e.dataTransfer.getData('text/plain');
+    const fromPos = e.dataTransfer.getData('from-cell');
     const troop = document.getElementById(troopId);
     const player = cell.dataset.allowedPlayer;
 
-    if (!troop || cell.hasChildNodes() || troop.dataset.player !== player) return;
+    // Vérifie que la troupe appartient au bon joueur
+    if (!troop || troop.dataset.player !== player) return;
 
-    const clone = troop.cloneNode(true);
-    setSize(clone, 60, 60);
-    cell.appendChild(clone);
+    // Supprimer la troupe existante sur la case
+    while (cell.firstChild) {
+        cell.removeChild(cell.firstChild);
+    }
 
-    const pos = `${row}-${col}`;
-    troopPositions[pos] = troopId;
+    // Si la troupe vient d'une autre case du plateau, retire-la de l'ancienne case
+    if (fromPos) {
+        const oldCell = document.querySelector(`.grid-cell[data-row="${fromPos.split('-')[0]}"][data-col="${fromPos.split('-')[1]}"]`);
+        if (oldCell && oldCell.firstChild && oldCell.firstChild.id === troopId) {
+            oldCell.removeChild(oldCell.firstChild);
+            delete troopPositions[fromPos];
+        }
+    }
 
-    updateTroopTable(getPlayerLabel(player), troop.textContent, pos);
-
-    console.log(`Position: ${pos}, ID: ${troopId}, Player: ${player}`);
+    // Ajouter la troupe dans la nouvelle case
+    cell.appendChild(troop);
+    troopPositions[`${row}-${col}`] = troopId;
+    updateTroopTable(getPlayerLabel(player), troop.textContent, `${row}-${col}`);
 }
 function getTroopQuery() {
     const query = Object.entries(troopPositions).map(([pos, id]) => {
