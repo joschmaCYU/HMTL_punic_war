@@ -1,4 +1,3 @@
-
 const unitTypes = {
     Legionnaire: {
         name: 'Legionnaire',
@@ -283,4 +282,12 @@ window.onload = function() {
     }
 
     // animate();
+};
+
+// Ajouter la fonction "page précédente"
+function goToPreviousPage() {
+    const params = new URLSearchParams(window.location.search);
+    const p1 = params.get('player1Faction');
+    const p2 = params.get('player2Faction');
+    window.location.href = `../Troop_Placement/page2.html?player1Faction=${p1}&player2Faction=${p2}`;
 }

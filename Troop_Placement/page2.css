@@ -9,7 +9,7 @@
 body {
     font-family: 'Cinzel', serif;
     margin-top: 90px;
-    background-image: url('../image/4455.jpg');
+    background-color: #ebdcbd;
     background-size: cover;
     background-repeat: no-repeat;
     margin-top: 30px;
@@ -85,4 +85,11 @@ h1 {
 .round-btn:hover {
   background: radial-gradient(circle at 10% 20%, #c8a068 20%, #f3844c 100%);
   transform: scale(1.1);
+}
+
+.troop-count {
+  font-family: 'Greconian', serif; /
+  font-size: 16px;
+  font-weight: bold;
+  color: #595959; 
 }

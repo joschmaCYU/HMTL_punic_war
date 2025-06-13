@@ -282,9 +282,13 @@ function startCombat() {
         return;
     }
 
+    const params = new URLSearchParams(window.location.search);
+    const p1 = params.get('player1Faction');
+    const p2 = params.get('player2Faction');
+
     const query = getTroopQuery();
     console.log(`Démarrer le combat avec les troupes : ${query}`);
-    window.location.href = `../Combat/page_combat.html?troop_placement=${query}`;
+    window.location.href = `../Combat/page_combat.html?troop_placement=${query}&player1Faction=${p1}&player2Faction=${p2}`;
     
 }
 
