@@ -11,13 +11,15 @@
     <source src="../musique/COMBAT1.mp3" type="audio/mpeg">
 </audio>
 
+<button id="previous-page" onclick="goToPreviousPage()">←</button>
+
 <script>
     document.addEventListener("click", function () {
         document.getElementById("audio").play();
     });
     </script>    
     <div id="player1-info" style="position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 20%; text-align: left;">
-        <h3>Troupes Joueur 1</h3>
+        <h3>Joueur 1</h3>
         <ul id="player1-troop-info"></ul>
     </div>
 
@@ -25,11 +27,9 @@
     </div>
 
     <div id="player2-info" style="position: absolute; right: 0; top: 50%; transform: translateY(-50%); width: 20%; text-align: right;">
-        <h3>Troupes Joueur 2</h3>
+        <h3>Joueur 2</h3>
         <ul id="player2-troop-info"></ul>
     </div>
-
-    <button id="previous-page" onclick="goToPreviousPage()">Page Précédente</button>
 
     <script src="page3.js"></script>
 
