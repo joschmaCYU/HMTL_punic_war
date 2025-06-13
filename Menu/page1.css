@@ -127,11 +127,12 @@ button:hover {
     font-size: 17px;
     border-radius: 1rem;
     border: none;
-    background: #be8b63; /* brun/terre cuite */
+    background: #be8b63; 
     transition: 0.1s; 
     position: relative;
-    align-content: center; /* position horizontale au centre */
+    align-content: center; 
     z-index: 10;
+    font-family: 'Greconian', serif;
 }
 
 #start-game::before {

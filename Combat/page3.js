@@ -1,7 +1,9 @@
 
 const unitTypes = {
-    Légionnaire: {
-        name: 'Légionnaire',
+    Legionnaire: {
+        name: 'Legionnaire',
+        posrow: 0,
+        poscol: 0,
         type: 'infanterie légère',
         description: "Unité de base de l armée romaine, armée d un glaive et d un bouclier.",
         health: 10,
@@ -12,6 +14,8 @@ const unitTypes = {
     },
     Archer: {
         name: 'Archer',
+        posrow: 0,
+        poscol: 0,
         type: 'infanterie longue distance',
         description: "tir à distance avec des flèches, mais vulnérable au corps à corps.",
         health: 10,
@@ -22,6 +26,8 @@ const unitTypes = {
     },
     Cavalier: {
         name: 'Cavalier',
+        posrow: 0,
+        poscol: 0,
         type: 'cavalerie lourde',
         description: "Unité de cavalerie lourde, armée d une lance et d un bouclier.",
         health: 10,
@@ -37,6 +43,8 @@ const carthageUnitTypes = {
 
     Lancier: {
         name: 'Infanterie Gauloise',
+        posrow: 0,
+        poscol: 0,
         type: 'infanterie légère',
         description: "Une infanterie courageuse et susceptible de charges furieuses.",
         health: 10,
@@ -47,6 +55,8 @@ const carthageUnitTypes = {
     },
     Frondeur: {
         name: 'Frondeur',
+        posrow: 0,
+        poscol: 0,
         type: 'infanterie légère',
         description: "Tireur d élite armé d une fronde, capable de tirer à distance.",
         health: 10,
@@ -55,8 +65,10 @@ const carthageUnitTypes = {
         defense: 1,
         line: 1,
     },
-    elephants: {
+    Elephants: {
         name: 'Eléphants de guerre',
+        posrow: 0,
+        poscol: 0,
         type: 'unité d’impact psychologique',
         description: "Une arme essentiellement psychologique, qui effraie particulièrement les chevaux. Au début d’une bataille : -1 moral à tous les ennemis à pied et -2 pour ceux à cheval.",
         health: 10,
@@ -68,7 +80,7 @@ const carthageUnitTypes = {
 };
 
 // Fonction pour créer une unité en clonant le modèle de base
-function createUnit(unitKey, side = 'rome') {
+function createUnit(unitKey, side) {
     let baseUnit;
     if (side === 'rome') {
         baseUnit = unitTypes[unitKey];
@@ -81,17 +93,50 @@ function createUnit(unitKey, side = 'rome') {
     // Utilisation de structuredClone pour éviter une simple référence
     return structuredClone(baseUnit);
 }
+function mouvementInfanterie(troopDiv, targetX, targetY, speed) {
+    const currentX = parseFloat(troopDiv.style.left);
+    const currentY = parseFloat(troopDiv.style.top);
 
+    const deltaX = targetX - currentX;
+    const deltaY = targetY - currentY;
+
+    const distance = Math.hypot(deltaX, deltaY);
+
+    if (distance < speed) {
+        troopDiv.style.left = `${targetX}px`;
+        troopDiv.style.top = `${targetY}px`;
+        return;
+    }
+
+    const stepX = (deltaX / distance) * speed;
+    const stepY = (deltaY / distance) * speed;
+
+    troopDiv.style.left = `${currentX + stepX}px`;
+    troopDiv.style.top = `${currentY + stepY}px`;
+
+    requestAnimationFrame(mouvementInfanterie);
+
+}
+
+
+
+function closestEnemi(troop, ) {
+
+
+
+
+
+}
 window.onload = function() {
     const params = new URLSearchParams(window.location.search);
     const placement = params.get('troop_placement');
     if (!placement) return;
 
     const idToName = {
-        1: 'légionnaire',
+        1: 'Legionnaire',
         2: 'Archer',
         3: 'Cavalier',
-        4: 'Éléphant de guerre',
+        4: 'Elephants',
         5: 'Lancier',
         6: 'Frondeur'
     };
@@ -112,6 +157,8 @@ window.onload = function() {
     const gap = 200;
 
     const troops = [];
+    const posArmee1 = [];
+    const posArmee2 = [];
 
 
     var Armee1 = [];
@@ -119,8 +166,8 @@ window.onload = function() {
 
     placement.split(',').forEach(entry => {
         const [player, pos, id] = entry.split(':');
-        console.log([player, pos, id])
         const [row, col] = pos.split('-').map(Number);
+        console.log([row, col])
         const name = idToName[parseInt(id, 10)];
         if (!name) return;
 
@@ -153,42 +200,47 @@ window.onload = function() {
         container.appendChild(troopDiv);
 
         troops.push({player: parseInt(player, 10), div: troopDiv});
-        console.log(id)
+        const nom = idToName[parseInt(id, 10)];
         if (player == '1') {
-            console.log('creation d une unité armée1')
-
-            if (id === '1' || id === '2' || id === '3') {
+            posArmee1.push([row, col]);
+            if (['1', '2', '3'].includes(id)) {
                 
-                Armee1.push(createUnit(id,side = 'rome'));
-                console.log('creation d une unité armée1 /////////')
+                Armee1.push(createUnit(nom,side = 'rome'));
             }
             
             if (['4', '5', '6'].includes(id)) {
 
-                Armee1.push(createUnit(id,side = 'carthage'));
+                Armee1.push(createUnit(nom,side = 'carthage'));
             }
         }
         if (player == '2') {
-            if ([1, 2, 3].includes(id)) {
+            posArmee2.push([row, col]);
+            if (['1', '2', '3'].includes(id)) {
 
-                Armee1.push(createUnit(id,side = 'rome'));
+                Armee2.push(createUnit(nom,side = 'rome'));
             }
-            if ([4, 5, 6].includes(id)) {
+            if (['4', '5', '6'].includes(id)) {
 
-                Armee2.push(createUnit(id,side = 'carthage'));
+                Armee2.push(createUnit(nom,side = 'carthage'));
             }
         }
         
     });
-    console.log(Armee1)
+    console.log('Armee1', Armee1);
+    console.log('posArmee1',posArmee1);
+    console.log('Armee2',Armee2);
+    console.log('posArmee2',posArmee2);
+    
     // Animation
     const speed = 1; // pixels par frame
+
+    
+
 
     function animate() {
         let movement = false;
         troops.forEach(troop => {
             const currentLeft = parseFloat(troop.div.style.left);
-            console.log(troop);
             if (troop.player === 1 && currentLeft + cellWidth < 500) {
                 troop.div.style.left = `${currentLeft + speed}px`;
                 movement = true;
@@ -203,5 +255,5 @@ window.onload = function() {
         }
     }
 
-    animate();
+    // animate();
 }
