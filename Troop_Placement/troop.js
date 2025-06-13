@@ -23,6 +23,8 @@ const boardGrid = document.getElementById('board-grid');
 boardGrid.style.gridTemplateColumns = 'repeat(10, 60px)';
 boardGrid.style.gridTemplateRows = 'repeat(10, 60px)';
 
+let troop_number = [{"Legionnaire":5}, {"Archer":5}, {"Cavalier":5}, {"Elephant de guerre":5}, {"Lancier":5}, {"Frondeur":5}]
+
 // ------------------ INITIALISATION ------------------
 
 function initialisation() {
@@ -110,57 +112,6 @@ function createCell(row, col) {
     return cell;
 }
 
-// Permettre le drag sur les troupes placées
-function handleDrop(e, row, col, cell) {
-    e.preventDefault();
-    const troopId = e.dataTransfer.getData('text/plain');
-    const fromPos = e.dataTransfer.getData('from-cell');
-    const troop = document.getElementById(troopId);
-    const player = cell.dataset.allowedPlayer;
-
-    // Vérifie que la troupe appartient au bon joueur
-    if (!troop || troop.dataset.player !== player) return;
-
-    // Si la case contient déjà une troupe, refuse le drop
-    if (cell.hasChildNodes()) 
-        {
-            cell.removeChild(cell.firstChild);
-        }
-         return;
-
-    // Si la troupe vient d'une autre case du plateau, retire-la de l'ancienne case
-    if (fromPos) {
-        const oldCell = document.querySelector(`.grid-cell[data-row="${fromPos.split('-')[0]}"][data-col="${fromPos.split('-')[1]}"]`);
-        if (oldCell && oldCell.firstChild && oldCell.firstChild.id === troopId) {
-            oldCell.removeChild(oldCell.firstChild);
-            delete troopPositions[fromPos];
-        }
-        // Déplace la troupe sur la nouvelle case
-        cell.appendChild(troop);
-        troopPositions[`${row}-${col}`] = troopId;
-        updateTroopTable(getPlayerLabel(player), troop.textContent, `${row}-${col}`);
-        return;
-    }
-
-    // Si la troupe vient de la liste, clone comme avant
-    const clone = troop.cloneNode(true);
-    setSize(clone, 60, 60);
-    clone.draggable = true;
-    clone.addEventListener('dragstart', handleDragStart);
-    cell.appendChild(clone);
-    troopPositions[`${row}-${col}`] = troopId;
-    updateTroopTable(getPlayerLabel(player), troop.textContent, `${row}-${col}`);
-}
-// Permettre le drag depuis la liste ET depuis le plateau
-function handleDragStart(e) {
-    e.dataTransfer.setData('text/plain', e.target.id);
-    // Si c'est une troupe déjà placée, ajoute la position d'origine
-    const parentCell = e.target.parentElement;
-    if (parentCell.classList.contains('grid-cell')) {
-        e.dataTransfer.setData('from-cell', `${parentCell.dataset.row}-${parentCell.dataset.col}`);
-    }
-}
-
 // ------------------ EVENT HANDLERS ------------------
 
 function handleDragStart(e) {
@@ -179,16 +130,19 @@ function handleDrop(e, row, col, cell) {
 
     // Supprimer la troupe existante sur la case
     while (cell.firstChild) {
+        return;
         cell.removeChild(cell.firstChild);
     }
 
-    // Si la troupe vient d'une autre case du plateau, retire-la de l'ancienne case
+    // Si la troupe si elle est sur le plateau
     if (fromPos) {
         const oldCell = document.querySelector(`.grid-cell[data-row="${fromPos.split('-')[0]}"][data-col="${fromPos.split('-')[1]}"]`);
         if (oldCell && oldCell.firstChild && oldCell.firstChild.id === troopId) {
             oldCell.removeChild(oldCell.firstChild);
             delete troopPositions[fromPos];
         }
+    } else {
+        console.log("first pose");
     }
 
     // Ajouter la troupe dans la nouvelle case
@@ -196,6 +150,7 @@ function handleDrop(e, row, col, cell) {
     troopPositions[`${row}-${col}`] = troopId;
     updateTroopTable(getPlayerLabel(player), troop.textContent, `${row}-${col}`);
 }
+
 function getTroopQuery() {
     const query = Object.entries(troopPositions).map(([pos, id]) => {
         const troop = document.getElementById(id);
@@ -238,9 +193,22 @@ function getPlayerLabel(code) {
 
 // ------------------ START COMBAT ------------------
 function startCombat() {
-    //const troop_placement = document.getElementById('updateTroopTable').value;
-    window.location.href = `../Combat/page_combat.html?troop_placement=${getTroopQuery()}`;
-    console.log(`Démarrer le combat avec les troupes : ${getTroopQuery}`);
+    // comptage des troupes par joueur
+    const entries = Object.values(troopPositions);
+    const count1 = entries.filter(id => id.startsWith('player1-')).length;
+    const count2 = entries.filter(id => id.startsWith('player2-')).length;
+    if (count1 === 0) {
+        alert('Joueur 1 doit placer au moins une troupe');
+        return;
+    }
+    if (count2 === 0) {
+        alert('Joueur 2 doit placer au moins une troupe');
+        return;
+    }
+
+    const query = getTroopQuery();
+    console.log(`Démarrer le combat avec les troupes : ${query}`);
+    window.location.href = `../Combat/page_combat.html?troop_placement=${query}`;
 }
 
 // ------------------ RUN ------------------
