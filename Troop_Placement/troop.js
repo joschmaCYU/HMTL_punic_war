@@ -1,12 +1,12 @@
 const factions = {
-    rome: ['légionnaire', 'Archer', 'Cavalier'],
-    carthage: ['Éléphant de guerre', 'Lancier', 'Frondeur']
+    rome: ['Legionnaire', 'Archer', 'Cavalier'],
+    carthage: ['Elephant de guerre', 'Lancier', 'Frondeur']
 };
 const TROOP_IDS = {
-    'légionnaire': 1,
+    'Legionnaire': 1,
     'Archer': 2,
     'Cavalier': 3,
-    'Éléphant de guerre': 4,
+    'Elephant de guerre': 4,
     'Lancier': 5,
     'Frondeur': 6
 };
@@ -62,6 +62,7 @@ function initTroopList(player, faction) {
     factions[faction].forEach((name, index) => {
         list.appendChild(createTroop(player, name, index));
     });
+    
 }
 
 function createTroop(player, name, index,) {

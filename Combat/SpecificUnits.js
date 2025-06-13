@@ -1,6 +1,6 @@
 // Définition des types d'unités pour Rome
 const unitTypes = {
-    Légionnaire: {
+    Legionnaire: {
         name: 'Légionnaire',
         type: 'infanterie légère',
         description: "Unité de base de l armée romaine, armée d un glaive et d un bouclier.",
