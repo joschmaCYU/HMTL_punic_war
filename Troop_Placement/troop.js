@@ -121,7 +121,7 @@ function handleDrop(e, row, col, cell) {
     if (!troop || troop.dataset.player !== player) return;
 
     // Si la case contient déjà une troupe, refuse le drop
-    if (cell.hasChildNodes())
+    if (cell.hasChildNodes()) 
         {
             cell.removeChild(cell.firstChild);
         }

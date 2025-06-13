@@ -1,15 +1,22 @@
-/* Style général */
+@font-face {
+  font-family: 'Greconian';
+  src: url('../fonts/GreconianRegular.woff') format('woff'),
+       url('../fonts/Greconian.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
 
 @font-face {
-    font-family: 'Block BE'; /* nom exact tel qu’affiché */
-    src: url('fonts/blockberthold.otf') format('opentype');
-  }
-  
+  font-family: 'BlockBarthold';
+  src: url('../fonts/BlockBarthold.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
   
 body {
-    font-family: 'Cinzel', serif;
-    margin-top: 180px;
-    background-image: url('image/Plan.png');
+    font-family: 'Greconian', sans-serif;
+    margin-top: 200px;
     background-color: #ebdcbd;
     background-size: cover;
     background-repeat: no-repeat;
@@ -17,13 +24,29 @@ body {
 }
 
 h1 {
-    font-family: 'Block BE', sans-serif;
+ 
     margin-top: 50px;
-    margin-bottom: 5px;
+    margin-bottom: 25px;
     text-align: center;
     color: #321b0d;
-    font-size: 4rem; /* ou 48px, ou 300% */
+    font-size: 4.7rem; /* ou 48px, ou 300% */
   }
+
+  h2 {
+    background-color: rgba(197, 92, 31, 0.634);
+    padding: 2px 4px;
+    border-radius: 5px;
+    color: #ffffff;
+
+  }
+
+
+p {
+  font-family: 'BlockBarthold', sans-serif;
+  text-align: center;
+  color: #ffffff;
+
+}
   
 
 .textejoueur {
@@ -38,7 +61,7 @@ h1 {
     justify-content: space-between;
     align-items: flex-start;
     width: 100%;
-    padding: 0 300px;
+    padding: 0 235px;
     box-sizing: border-box;
     margin-top: 60px; 
 }
@@ -49,7 +72,7 @@ h1 {
     height: 400px; /* hauteur fixe */
     padding: 20px;
     border-radius: 1.5rem;
-    background-color: #f3e2c7c5;
+    background-color: #cbc2b3c5;
     border: 2px solid #96512c00;
     
 }
@@ -70,8 +93,8 @@ h1 {
 
 button {
     padding: 10px 15px;
-    background-color: #3e261c;
-    color: white;
+    background-color: #ffffff64;
+    color: rgb(94, 94, 94);
     border: none;
     border-radius: 10px;
     cursor: pointer;

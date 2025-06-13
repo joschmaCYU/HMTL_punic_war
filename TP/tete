@@ -1,0 +1,10 @@
+  | Notion                    | Exemple                                                |
+| ------------------------- | ------------------------------------------------------ |
+| Déclarer une variable     | `let score = 0;`                                       |
+| Créer une fonction        | `function startGame() {}`                              |
+| Math.random()             | `Math.floor(Math.random() * 10)` → entier entre 0 et 9 |
+| setInterval / setTimeout  | `setInterval(() => {...}, 1000);`                      |
+| Modifier le DOM           | `document.getElementById("id").textContent = "Texte"`  |
+| Ajout de classes / styles | `element.classList.add("maClasse")`                    |
+| Conditions                | `if (a > b) { ... }`                                   |
+| Boucles                   | `for (let i = 0; i < 3; i++) {}`                       |

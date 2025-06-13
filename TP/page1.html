@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JEU</title>
+    <script src="page.js"></script>
+    <link rel="stylesheet" href="page1.css">
+</head>
+<body>
+    <h1>CONSTRUCTION ANTIQUE</h1>
+    
+    <div class="bloc">
+      <div class="ressources">
+        <div id="money">
+          Argent : <span id="argent"></span><br>
+          <img src="argent.png" width="100">
+        </div>
+        <div id="wood">
+          Bois : <span id="bois"></span><br>
+          <img src="bois.png" width="100">
+        </div>
+        <div id="eat">
+          Nourriture : <span id="nourriture"></span><br>
+          <img src="nourriture.png" width="100">
+        </div>
+      </div>
+      <div class="bat">
+        <div class="scierie">
+          <h2>Scierie : coût 300 Argent</h2>
+          
+          <img id="bat1" src="Sans titre - 1.png" width="300">
+          <h3>Production : 10 Bois</h3>
+          <button class="button1">Construire</button>
+        </div>
+    
+        <div class="poissonnerie">
+          <h2>Poissonnerie : coût 100 Argent et 20 Bois</h2>
+          
+          <img id="poisson" src="poisson.png" width="300">
+          <h3>Production : 100 Nourriture</h3>
+          <button class="button2" onclick="paye('poissonnerie')">Construire</button>
+        </div>
+      </div>
+    </div>
+    
+    
+</body>
+</html>
+ 
+
+
