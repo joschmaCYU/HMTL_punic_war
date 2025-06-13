@@ -62,6 +62,7 @@ function initTroopList(player, faction) {
     factions[faction].forEach((name, index) => {
         list.appendChild(createTroop(player, name, index));
     });
+    
 }
 
 function createTroop(player, name, index,) {
