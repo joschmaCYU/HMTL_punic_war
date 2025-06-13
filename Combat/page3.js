@@ -1,6 +1,6 @@
 
 const unitTypes = {
-    legionnaire: {
+    Legionnaire: {
         name: 'Legionnaire',
         type: 'infanterie légère',
         description: "Unité de base de l armée romaine, armée d un glaive et d un bouclier.",
@@ -10,7 +10,7 @@ const unitTypes = {
         defense: 1,
         line: 1,
     },
-    archer: {
+    Archer: {
         name: 'Archer',
         type: 'infanterie longue distance',
         description: "tir à distance avec des flèches, mais vulnérable au corps à corps.",
@@ -88,12 +88,12 @@ window.onload = function() {
     if (!placement) return;
 
     const idToName = {
-        1: 'legionnaire',
-        2: 'archer',
-        3: 'cavalier',
-        4: 'elephant de guerre',
-        5: 'lancier',
-        6: 'frondeur'
+        1: 'Legionnaire',
+        2: 'Archer',
+        3: 'Cavalier',
+        4: 'Elephants',
+        5: 'Lancier',
+        6: 'Frondeur'
     };
 
     const container = document.createElement('div');
