@@ -17,7 +17,6 @@
 body {
     font-family: 'Greconian', sans-serif;
     margin-top: 200px;
-    background-image: url('image/Plan.png');
     background-color: #ebdcbd;
     background-size: cover;
     background-repeat: no-repeat;
@@ -27,20 +26,22 @@ body {
 h1 {
  
     margin-top: 50px;
-    margin-bottom: 30px;
+    margin-bottom: 25px;
     text-align: center;
     color: #321b0d;
     font-size: 4.7rem; /* ou 48px, ou 300% */
   }
 
   h2 {
- 
+    background-color: rgba(197, 92, 31, 0.634);
+    padding: 2px 4px;
+    border-radius: 5px;
     color: #ffffff;
 
   }
 
 
-P {
+p {
   font-family: 'BlockBarthold', sans-serif;
   text-align: center;
   color: #ffffff;

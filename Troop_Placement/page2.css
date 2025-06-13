@@ -1,3 +1,11 @@
+@font-face {
+  font-family: 'Greconian';
+  src: url('../fonts/GreconianRegular.woff') format('woff'),
+       url('../fonts/Greconian.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 body {
     font-family: 'Cinzel', serif;
     margin-top: 90px;
@@ -9,8 +17,11 @@ body {
 }
 
 h1 {
-    margin-top: 10px;
+    font-family: 'Greconian', sans-serif;
+    margin-top: 5px;
 }
+
+
 .button-group {
     display: flex;
     justify-content: center;
