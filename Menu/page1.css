@@ -42,7 +42,7 @@ h1 {
 
 
 p {
-  font-family: 'BlockBarthold', sans-serif;
+  font-family: 'Inter', sans-serif;
   text-align: center;
   color: #ffffff;
 
@@ -124,7 +124,7 @@ button:hover {
     height: 70px;
     cursor: pointer;
     color: #fff;
-    font-size: 17px;
+    font-size: 20px;
     border-radius: 1rem;
     border: none;
     background: #be8b63; 
