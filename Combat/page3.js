@@ -1,19 +1,101 @@
+
+const unitTypes = {
+    legionnaire: {
+        name: 'Legionnaire',
+        type: 'infanterie légère',
+        description: "Unité de base de l armée romaine, armée d un glaive et d un bouclier.",
+        health: 10,
+        morale: 5,
+        attack: 4,
+        defense: 1,
+        line: 1,
+    },
+    archer: {
+        name: 'Archer',
+        type: 'infanterie longue distance',
+        description: "tir à distance avec des flèches, mais vulnérable au corps à corps.",
+        health: 10,
+        morale: 10,
+        attack: 4,
+        defense: 2,
+        line: 3,
+    },
+    Cavalier: {
+        name: 'Cavalier',
+        type: 'cavalerie lourde',
+        description: "Unité de cavalerie lourde, armée d une lance et d un bouclier.",
+        health: 10,
+        morale: 10,
+        attack: 4, // Vous pouvez ajouter +1 lors d'une attaque spécifique si nécessaire
+        defense: 2,
+        line: 2,
+    },
+};
+
+// Définition des types d'unités pour Carthage
+const carthageUnitTypes = {
+
+    Lancier: {
+        name: 'Infanterie Gauloise',
+        type: 'infanterie légère',
+        description: "Une infanterie courageuse et susceptible de charges furieuses.",
+        health: 10,
+        morale: 10,
+        attack: 4,
+        defense: 0,
+        line: 1,
+    },
+    Frondeur: {
+        name: 'Frondeur',
+        type: 'infanterie légère',
+        description: "Tireur d élite armé d une fronde, capable de tirer à distance.",
+        health: 10,
+        morale: 5,
+        attack: 3,
+        defense: 1,
+        line: 1,
+    },
+    elephants: {
+        name: 'Eléphants de guerre',
+        type: 'unité d’impact psychologique',
+        description: "Une arme essentiellement psychologique, qui effraie particulièrement les chevaux. Au début d’une bataille : -1 moral à tous les ennemis à pied et -2 pour ceux à cheval.",
+        health: 10,
+        morale: 5,
+        attack: 5,
+        defense: 0,
+        line: 3,
+    },
+};
+
+// Fonction pour créer une unité en clonant le modèle de base
+function createUnit(unitKey, side = 'rome') {
+    let baseUnit;
+    if (side === 'rome') {
+        baseUnit = unitTypes[unitKey];
+    } else if (side === 'carthage') {
+        baseUnit = carthageUnitTypes[unitKey];
+    }
+    if (!baseUnit) {
+        throw new Error(`Type d'unité inconnu: ${unitKey} pour ${side}`);
+    }
+    // Utilisation de structuredClone pour éviter une simple référence
+    return structuredClone(baseUnit);
+}
+
 window.onload = function() {
     const params = new URLSearchParams(window.location.search);
     const placement = params.get('troop_placement');
     if (!placement) return;
 
-    // Correspondance ID -> nom image
     const idToName = {
-        1: 'légionnaire',
-        2: 'Archer',
-        3: 'Cavalier',
-        4: 'Éléphant de guerre',
-        5: 'Lancier',
-        6: 'Frondeur'
+        1: 'legionnaire',
+        2: 'archer',
+        3: 'cavalier',
+        4: 'elephant de guerre',
+        5: 'lancier',
+        6: 'frondeur'
     };
 
-    // Création du conteneur principal centré
     const container = document.createElement('div');
     container.style.position = 'relative';
     container.style.width = '1000px';
@@ -25,31 +107,33 @@ window.onload = function() {
     container.style.border = '2px solid #999';
     document.body.appendChild(container);
 
-    // Placement des troupes
-    // Grille 10 colonnes, 5 à gauche, 5 à droite, 200px de gap au centre
-    const cellWidth = 80;  // (1000 - 200) / 10 = 80px
-    const cellHeight = 80; // 800 / 10 = 80px
-    const gap = 200;       // 200px de séparation centrale
+    const cellWidth = 80;
+    const cellHeight = 80;
+    const gap = 200;
+
+    const troops = [];
+
+
+    var Armee1 = [];
+    var Armee2 = [];
 
     placement.split(',').forEach(entry => {
         const [player, pos, id] = entry.split(':');
+        console.log([player, pos, id])
         const [row, col] = pos.split('-').map(Number);
         const name = idToName[parseInt(id, 10)];
         if (!name) return;
 
         let left;
         if (col <= 4) {
-            // Joueur 1, colonnes 0 à 4 (à gauche du gap)
             left = col * cellWidth;
         } else if (col >= 5 && col <= 9) {
-            // Joueur 2, colonnes 5 à 9 (à droite du gap)
             left = (col - 5) * cellWidth + 5 * cellWidth + gap;
         } else {
             left = 0;
         }
         const top = row * cellHeight;
 
-        // Création de l'élément troupe
         const troopDiv = document.createElement('div');
         troopDiv.className = 'troop';
         troopDiv.style.position = 'absolute';
@@ -67,5 +151,57 @@ window.onload = function() {
         troopDiv.appendChild(img);
 
         container.appendChild(troopDiv);
+
+        troops.push({player: parseInt(player, 10), div: troopDiv});
+        console.log(id)
+        if (player == '1') {
+            console.log('creation d une unité armée1')
+
+            if (id === '1' || id === '2' || id === '3') {
+                
+                Armee1.push(createUnit(id,side = 'rome'));
+                console.log('creation d une unité armée1 /////////')
+            }
+            
+            if (['4', '5', '6'].includes(id)) {
+
+                Armee1.push(createUnit(id,side = 'carthage'));
+            }
+        }
+        if (player == '2') {
+            if ([1, 2, 3].includes(id)) {
+
+                Armee1.push(createUnit(id,side = 'rome'));
+            }
+            if ([4, 5, 6].includes(id)) {
+
+                Armee2.push(createUnit(id,side = 'carthage'));
+            }
+        }
+        
     });
+    console.log(Armee1)
+    // Animation
+    const speed = 1; // pixels par frame
+
+    function animate() {
+        let movement = false;
+        troops.forEach(troop => {
+            const currentLeft = parseFloat(troop.div.style.left);
+            console.log(troop);
+            if (troop.player === 1 && currentLeft + cellWidth < 500) {
+                troop.div.style.left = `${currentLeft + speed}px`;
+                movement = true;
+            } else if (troop.player === 2 && currentLeft > 500) {
+                troop.div.style.left = `${currentLeft - speed}px`;
+                movement = true;
+            }
+        });
+
+        if (movement) {
+            requestAnimationFrame(animate);
+        }
+    }
+
+    animate();
 }
