@@ -80,7 +80,7 @@ const carthageUnitTypes = {
 };
 
 // Fonction pour créer une unité en clonant le modèle de base
-function createUnit(unitKey, side) {
+function createUnit(unitKey, side,poscol, posrow) {
     let baseUnit;
     if (side === 'rome') {
         baseUnit = unitTypes[unitKey];
@@ -90,6 +90,8 @@ function createUnit(unitKey, side) {
     if (!baseUnit) {
         throw new Error(`Type d'unité inconnu: ${unitKey} pour ${side}`);
     }
+    baseUnit.poscol = poscol;
+    baseUnit.posrow = posrow;
     // Utilisation de structuredClone pour éviter une simple référence
     return structuredClone(baseUnit);
 }
@@ -120,13 +122,25 @@ function mouvementInfanterie(troopDiv, targetX, targetY, speed) {
 
 
 
-function closestEnemi(troop, ) {
+function closestEnemi(unite,ArmeeEnnemi) {
 
+    let ennemiLePlusProche = null;
+    let distanceMinimale = Infinity;
 
+    ArmeeEnnemi.forEach(ennemi => {
+        const deltaRow = ennemi.posrow - unite.posrow;
+        const deltaCol = ennemi.poscol - unite.poscol;
+        const distance = Math.hypot(deltaRow, deltaCol);
 
-
-
+        if (distance < distanceMinimale) {
+            distanceMinimale = distance;
+            ennemiLePlusProche = ennemi;
+        }
+    });
+    return ennemiLePlusProche;
 }
+
+
 window.onload = function() {
     const params = new URLSearchParams(window.location.search);
     const placement = params.get('troop_placement');
@@ -165,9 +179,10 @@ window.onload = function() {
     var Armee2 = [];
 
     placement.split(',').forEach(entry => {
+
         const [player, pos, id] = entry.split(':');
         const [row, col] = pos.split('-').map(Number);
-        console.log([row, col])
+        
         const name = idToName[parseInt(id, 10)];
         if (!name) return;
 
@@ -205,36 +220,48 @@ window.onload = function() {
             posArmee1.push([row, col]);
             if (['1', '2', '3'].includes(id)) {
                 
-                Armee1.push(createUnit(nom,side = 'rome'));
+                Armee1.push(createUnit(nom,side = 'rome',col,row ));
             }
             
             if (['4', '5', '6'].includes(id)) {
 
-                Armee1.push(createUnit(nom,side = 'carthage'));
+                Armee1.push(createUnit(nom,side = 'carthage',col,row));
             }
         }
         if (player == '2') {
             posArmee2.push([row, col]);
             if (['1', '2', '3'].includes(id)) {
 
-                Armee2.push(createUnit(nom,side = 'rome'));
+                Armee2.push(createUnit(nom,side = 'rome', col,row));
             }
             if (['4', '5', '6'].includes(id)) {
 
-                Armee2.push(createUnit(nom,side = 'carthage'));
+                Armee2.push(createUnit(nom,side = 'carthage', col,row));
             }
         }
         
     });
     console.log('Armee1', Armee1);
-    console.log('posArmee1',posArmee1);
     console.log('Armee2',Armee2);
-    console.log('posArmee2',posArmee2);
     
     // Animation
     const speed = 1; // pixels par frame
 
-    
+    Armee1.forEach(unite => {
+
+        cible = closestEnemi(unite,Armee2);
+
+        console.log(`${unite.name} en ${unite.posrow},${unite.poscol} cible ${cible.name} en ${cible.posrow},${cible.poscol}`);
+  
+    })
+
+    Armee2.forEach(unite => {
+
+        cible = closestEnemi(unite,Armee1);
+
+        console.log(`${unite.name} en ${unite.posrow},${unite.poscol} cible ${cible.name} en ${cible.posrow},${cible.poscol}`);
+  
+    })
 
 
     function animate() {
