@@ -85,9 +85,27 @@ function createCell(row, col) {
     cell.className = 'grid-cell';
     cell.dataset.row = row;
     cell.dataset.col = col;
-    cell.dataset.allowedPlayer = col < 5 ? 'player1' : 'player2';
 
-    // Ajout du style pour la ligne rouge centrale
+    // Détermine le joueur pour cette colonne
+    let player = col < 5 ? 'player1' : 'player2';
+    cell.dataset.allowedPlayer = player;
+
+    // Récupère la faction choisie pour ce joueur
+    const faction = selectedFactions[player];
+
+    // Applique le damier selon la civilisation choisie
+    if (faction === 'rome') {
+        // Damier rouge pour Rome
+        cell.style.backgroundColor = (row + col) % 2 === 0 ? '#ffcccc' : '#ffffff';
+    } else if (faction === 'carthage') {
+        // Damier bleu pour Carthage
+        cell.style.backgroundColor = (row + col) % 2 === 0 ? '#cce0ff' : '#ffffff';
+    } else {
+        // Couleur par défaut si aucune faction
+        cell.style.backgroundColor = '#ffffff';
+    }
+
+    // Ligne rouge centrale
     if (col === 4) {
         cell.style.borderRight = '3px solid red';
     }
