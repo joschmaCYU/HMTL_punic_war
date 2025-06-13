@@ -23,7 +23,7 @@ const boardGrid = document.getElementById('board-grid');
 boardGrid.style.gridTemplateColumns = 'repeat(10, 60px)';
 boardGrid.style.gridTemplateRows = 'repeat(10, 60px)';
 
-let troop_number = [{"Legionnaire":5}, {"Archer":5}, {"Cavalier":5}, {"Elephant de guerre":5}, {"Lancier":5}, {"Frondeur":5}]
+let troop_number = [{ "Legionnaire": 2 }, { "Archer": 3 }, { "Cavalier": 5 }, { "Elephant de guerre": 5 }, { "Lancier": 5 }, { "Frondeur": 5 }]
 
 // ------------------ INITIALISATION ------------------
 
@@ -64,20 +64,37 @@ function initTroopList(player, faction) {
     factions[faction].forEach((name, index) => {
         list.appendChild(createTroop(player, name, index));
     });
-    
+
 }
 
-function createTroop(player, name, index,) {
+function createTroop(player, name, index) {
     const img = document.createElement('img');
     img.className = 'troop-item';
     img.src = `../image/${name}.png`;
     img.id = `${player}-troop-${index}`;
     img.draggable = true;
     img.dataset.player = player;
-    img.textContent = name;
+
+    // Add troop_number for each troop
+    const countObj = troop_number.find(obj => obj[name] !== undefined);
+    const count = countObj ? countObj[name] : 0;
+    img.dataset.count = count;
+    img.dataset.name = name;                 // add troop name
+    img.title = `${name} (${count})`;
+
+    // wrap icon + badge
+    const wrapper = document.createElement('div');
+    wrapper.className = 'troop-item-wrapper';
+    wrapper.appendChild(img);
+
+    const badge = document.createElement('span');
+    badge.className = 'troop-count';
+    badge.textContent = `x${count}`;
+    wrapper.appendChild(badge);
+
     setSize(img, 60, 60);
     img.addEventListener('dragstart', handleDragStart);
-    return img;
+    return wrapper;
 }
 
 // ------------------ BOARD CELLS ------------------
@@ -128,10 +145,9 @@ function handleDrop(e, row, col, cell) {
     // Vérifie que la troupe appartient au bon joueur
     if (!troop || troop.dataset.player !== player) return;
 
-    // Supprimer la troupe existante sur la case
+    // Ne supprime pas la troupe existante sur la case
     while (cell.firstChild) {
         return;
-        cell.removeChild(cell.firstChild);
     }
 
     // Si la troupe si elle est sur le plateau
@@ -142,7 +158,27 @@ function handleDrop(e, row, col, cell) {
             delete troopPositions[fromPos];
         }
     } else {
-        console.log("first pose");
+        // first placement: decrement count
+
+        const name = troop.dataset.name;
+        const cntObj = troop_number.find(o => o[name] !== undefined);
+        if (cntObj) {
+            cntObj[name]--;
+            const newCount = cntObj[name];
+            const wrapper = troop.parentNode;
+            const badge = wrapper.querySelector('.troop-count');
+            badge.textContent = `x${newCount}`;
+
+            troop.dataset.count = newCount;
+            troop.title = `${name} (${newCount})`;
+            // ne supprime l’icône que si le compte atteint 0
+            if (newCount <= 0) {
+                const wrapper = troop.parentNode;
+                wrapper.remove();
+            } else {
+                
+            }
+        }
     }
 
     // Ajouter la troupe dans la nouvelle case
@@ -160,7 +196,7 @@ function getTroopQuery() {
         return `${player[6]}:${pos}:${troopNumId}`;
     }).join(',');
     console.log(`Query: ${query}`);
-    return query;   
+    return query;
 }
 
 // ------------------ TABLE ------------------
