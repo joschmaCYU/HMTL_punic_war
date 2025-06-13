@@ -230,7 +230,7 @@ function handleDrop(e, row, col, cell) {
 function getTroopQuery() {
     const query = Object.entries(troopPositions).map(([pos, id]) => {
         const troop = document.getElementById(id);
-        const name = troop?.textContent || '';
+        const name = troop?.dataset.name || '';
         const troopNumId = getTroopIdByName(name);
         const [player] = id.split('-');
         return `${player[6]}:${pos}:${troopNumId}`;
