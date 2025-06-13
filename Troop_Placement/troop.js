@@ -1,12 +1,12 @@
 const factions = {
     rome: ['Legionnaire', 'Archer', 'Cavalier'],
-    carthage: ['Elephant de guerre', 'Lancier', 'Frondeur']
+    carthage: ['Elephants', 'Lancier', 'Frondeur']
 };
 const TROOP_IDS = {
     'Legionnaire': 1,
     'Archer': 2,
     'Cavalier': 3,
-    'Elephant de guerre': 4,
+    'Elephants': 4,
     'Lancier': 5,
     'Frondeur': 6
 };
