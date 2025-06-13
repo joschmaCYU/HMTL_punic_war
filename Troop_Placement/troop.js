@@ -23,7 +23,13 @@ const boardGrid = document.getElementById('board-grid');
 boardGrid.style.gridTemplateColumns = 'repeat(10, 60px)';
 boardGrid.style.gridTemplateRows = 'repeat(10, 60px)';
 
-let troop_number = [{ "Legionnaire": 2 }, { "Archer": 3 }, { "Cavalier": 5 }, { "Elephant de guerre": 5 }, { "Lancier": 5 }, { "Frondeur": 5 }]
+let troop_number_player1 = [{ "Legionnaire": 2 }, { "Archer": 3 }, { "Cavalier": 5 }, { "Elephants": 5 }, { "Lancier": 5 }, { "Frondeur": 5 }];
+let troop_number_player2 = [{ "Legionnaire": 2 }, { "Archer": 3 }, { "Cavalier": 5 }, { "Elephants": 5 }, { "Lancier": 5 }, { "Frondeur": 5 }];
+
+// helper to pick the right count array
+function getTroopCounts(player) {
+    return player === 'player1' ? troop_number_player1 : troop_number_player2;
+}
 
 // ------------------ INITIALISATION ------------------
 
@@ -60,8 +66,15 @@ function initTroopList(player, faction) {
     list.style.display = 'flex';
     list.style.flexDirection = 'column';
     list.style.alignItems = player === 'player1' ? 'flex-start' : 'flex-end';
+    if (!faction) return;
 
-    factions[faction].forEach((name, index) => {
+    // If troop count is 0 do not place the troop
+    const availableTroops = factions[faction].filter(name => {
+        const countObj = getTroopCounts(player).find(o => o[name] !== undefined);
+        return countObj && countObj[name] > 0;
+    });
+
+    availableTroops.forEach((name, index) => {
         list.appendChild(createTroop(player, name, index));
     });
 
@@ -76,7 +89,7 @@ function createTroop(player, name, index) {
     img.dataset.player = player;
 
     // Add troop_number for each troop
-    const countObj = troop_number.find(obj => obj[name] !== undefined);
+    const countObj = getTroopCounts(player).find(obj => obj[name] !== undefined);
     const count = countObj ? countObj[name] : 0;
     img.dataset.count = count;
     img.dataset.name = name;                 // add troop name
@@ -158,10 +171,8 @@ function handleDrop(e, row, col, cell) {
             delete troopPositions[fromPos];
         }
     } else {
-        // first placement: decrement count
-
         const name = troop.dataset.name;
-        const cntObj = troop_number.find(o => o[name] !== undefined);
+        const cntObj = getTroopCounts(player).find(o => o[name] !== undefined);
         if (cntObj) {
             cntObj[name]--;
             const newCount = cntObj[name];
@@ -176,7 +187,18 @@ function handleDrop(e, row, col, cell) {
                 const wrapper = troop.parentNode;
                 wrapper.remove();
             } else {
-                
+                const list = document.getElementById(`${player}-troop-list`);
+                list.innerHTML = '';
+                list.style.display = 'flex';
+                list.style.flexDirection = 'column';
+                list.style.alignItems = player === 'player1' ? 'flex-start' : 'flex-end';
+                const faction = selectedFactions[player];
+                factions[faction].forEach((troopName, idx) => {
+                    const countObj = getTroopCounts(player).find(o => o[troopName] !== undefined);
+                    if (countObj && countObj[troopName] > 0) {
+                        list.appendChild(createTroop(player, troopName, idx));
+                    }
+                });
             }
         }
     }
@@ -245,6 +267,7 @@ function startCombat() {
     const query = getTroopQuery();
     console.log(`Démarrer le combat avec les troupes : ${query}`);
     window.location.href = `../Combat/page_combat.html?troop_placement=${query}`;
+    
 }
 
 // ------------------ RUN ------------------
