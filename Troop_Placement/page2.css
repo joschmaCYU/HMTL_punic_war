@@ -9,6 +9,7 @@
 body {
     font-family: 'Cinzel', serif;
     margin-top: 90px;
+    background-image: url('../image/fond22.png');
     background-color: #ebdcbd;
     background-size: cover;
     background-repeat: no-repeat;
@@ -17,8 +18,11 @@ body {
 }
 
 h1 {
+    color: #321b0d;
+    font-size: 3rem; 
     font-family: 'Greconian', sans-serif;
     margin-top: 5px;
+    margin-bottom: 2px;
 }
 
 
@@ -26,7 +30,7 @@ h1 {
     display: flex;
     justify-content: center;
     gap: 30px;
-    margin-top: 40px;
+    margin-top: 20px;
   }
   
   .btn {
@@ -91,5 +95,5 @@ h1 {
   font-family: 'Greconian', serif; /
   font-size: 16px;
   font-weight: bold;
-  color: #595959; 
+  color: #321b0d;
 }
