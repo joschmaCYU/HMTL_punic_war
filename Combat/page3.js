@@ -167,7 +167,6 @@ function Attaquer(unite, ennemi, Armee1, Armee2) {
     
     
     console.log(unite.name, 'attaque', ennemi.name)
-    console.log(ennemi.health);
 
     if(ennemi.health <= 0) {
 
@@ -340,7 +339,7 @@ window.onload = function() {
                 }
             })
 
-            
+
             Armee1.forEach(unite => {
                 cible = closestEnemi(unite,Armee2);
                 if (Armee2.length !== 0) {
