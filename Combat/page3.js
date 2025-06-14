@@ -312,34 +312,45 @@ window.onload = function() {
 
     
     while ( Armee1.length !== 0 && Armee2.length !== 0) {
-        Armee1.forEach(unite => {
 
-            cible = closestEnemi(unite,Armee2);
-            // console.log(`${cible.name} ennemi à: `, calculerDistance(unite,cible),'de distance');
-
-            // console.log(`${unite.name} en ${unite.posrow},${unite.poscol} cible ${cible.name} en ${cible.posrow},${cible.poscol}`);
-           if (Armee2.length !== 0) {
-                Attaquer(unite, cible, Armee1, Armee2);
-
-           }
-            // Attaquer(unite, cible, Armee1, Armee2);
-  
-        })
-
-        Armee2.forEach(unite => {
-
-            cible = closestEnemi(unite,Armee1);
-
-            // console.log(`${unite.name} en ${unite.posrow},${unite.poscol} cible ${cible.name} en ${cible.posrow},${cible.poscol}`);
-            if (Armee1.length !== 0) {
-
-                Attaquer(unite, cible, Armee1, Armee2);
-
+        var firsttoattack = Math.random();
+        if (firsttoattack <= 0.5){
+            Armee1.forEach(unite => {
+                cible = closestEnemi(unite,Armee2);
+                if (Armee2.length !== 0) {
+                    Attaquer(unite, cible, Armee1, Armee2);
             }
-            
-            // Attaquer(unite, cible, Armee1, Armee2);
-        })
+            })
 
+            Armee2.forEach(unite => {
+                cible = closestEnemi(unite,Armee1);
+                if (Armee1.length !== 0) {
+                    Attaquer(unite, cible, Armee1, Armee2);
+                }
+            })
+
+        }
+        if (firsttoattack >= 0.5){
+
+
+            Armee2.forEach(unite => {
+                cible = closestEnemi(unite,Armee1);
+                if (Armee1.length !== 0) {
+                    Attaquer(unite, cible, Armee1, Armee2);
+                }
+            })
+
+            
+            Armee1.forEach(unite => {
+                cible = closestEnemi(unite,Armee2);
+                if (Armee2.length !== 0) {
+                    Attaquer(unite, cible, Armee1, Armee2);
+                }
+            })
+
+            
+
+        }
     
         if (Armee1.length == 0) {
             console.log("Victoire de l'armée 2")
