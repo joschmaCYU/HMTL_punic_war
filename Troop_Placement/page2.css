@@ -97,3 +97,10 @@ h1 {
   font-weight: bold;
   color: #321b0d;
 }
+
+#game-board {
+    border: 8px solid #8B5E3C;
+    border-radius: 5px;       
+    padding: 2px;  
+
+}
