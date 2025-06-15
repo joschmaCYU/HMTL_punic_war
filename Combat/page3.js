@@ -97,7 +97,7 @@ const carthageUnitTypes = {
 };
 
 // Fonction pour créer une unité en clonant le modèle de base
-function createUnit(unitKey, side,poscol, posrow,camp) {
+function createUnit(unitKey, side, poscol, posrow, camp) {
     let baseUnit;
     if (side === 'rome') {
         baseUnit = unitTypes[unitKey];
@@ -135,13 +135,11 @@ function mouvementInfanterie(troopDiv, targetX, targetY, speed) {
     troopDiv.style.top = `${currentY + stepY}px`;
 
     requestAnimationFrame(mouvementInfanterie);
-
 }
 
 
 
-function closestEnemi(unite,ArmeeEnnemi) {
-
+function closestEnemi(unite, ArmeeEnnemi) {
     let ennemiLePlusProche = null;
     let distanceMinimale = Infinity;
 
@@ -155,7 +153,7 @@ function closestEnemi(unite,ArmeeEnnemi) {
             ennemiLePlusProche = ennemi;
         }
     });
-    if (ennemiLePlusProche != null){
+    if (ennemiLePlusProche != null) {
         // console.log(`${unite.name} en ${unite.posrow},${unite.poscol} cible ${ennemiLePlusProche.name} en ${ennemiLePlusProche.posrow},${ennemiLePlusProche.poscol}`);
 
     }
@@ -169,62 +167,81 @@ function calculerDistance(unite, ennemi) {
     return Math.floor(Math.hypot(deltaRow, deltaCol));
 }
 
-function avancer(unite, ennemi) {
-    console.log("la troupe",unite.name, "en", unite.posrow, unite.poscol);
+function avancer(unite, ennemi, Armee1, Armee2) {
+    console.log("la troupe", unite.name, "en", unite.posrow, unite.poscol);
 
-    for(var i = 1; i <= unite.vitesse; i++){
+    for (let i = 1; i <= unite.vitesse; i++) {
         const deltaRow = ennemi.posrow - unite.posrow;
         const deltaCol = ennemi.poscol - unite.poscol;
-        
+        let nextRow = unite.posrow, nextCol = unite.poscol;
+
         if (deltaRow !== 0) {
-            unite.posrow += deltaRow / Math.abs(deltaRow); // avance d'une case vers l'ennemi sur l'axe vertical
+            nextRow += deltaRow / Math.abs(deltaRow);
         } else if (deltaCol !== 0) {
-            unite.poscol += deltaCol / Math.abs(deltaCol); // avance d'une case vers l'ennemi sur l'axe horizontal
+            nextCol += deltaCol / Math.abs(deltaCol);
         }
+
+        // collision check: any other unit in same cell?
+        const occupied = [...Armee1, ...Armee2].some(u =>
+            u !== unite && u.posrow === nextRow && u.poscol === nextCol
+        );
+        if (occupied) {
+            console.log(unite.name, "est bloqué");
+            return; // blocked, stop movement
+        }
+
+        // apply move since free
+        unite.posrow = nextRow;
+        unite.poscol = nextCol;
     }
+
+    animate_move_to(unite);
     console.log("se déplace en", unite.posrow, unite.poscol);
 }
 
 function Attaquer(unite, ennemi, Armee1, Armee2) {
 
     let degat = unite.attack;
-    if(ennemi.morale <= 3 && unite.morale >= 5) {
-        degat+= 2;
+    if (ennemi.morale <= 3 && unite.morale >= 5) {
+        degat += 2;
     }
-    
-    ennemi.health -= degat;
-    
-    
-    console.log(unite.name, 'attaque', ennemi.name, "qui se retrouve avec", ennemi.health,'pv');
 
-    if(ennemi.health <= 0) {
+    ennemi.health -= degat;
+
+
+    console.log(unite.name, 'attaque', ennemi.name, "qui se retrouve avec", ennemi.health, 'pv');
+
+    if (ennemi.health <= 0) {
 
         isDead(ennemi, Armee1, Armee2);
     }
 }
 
-function isDead(unite, Armee1, Armee2 ) {
-    if (unite.camp == 1){
+function isDead(unite, Armee1, Armee2) {
+    if (unite.div) {
+        unite.div.style.display = 'none';
+    }
+    if (unite.camp == 1) {
         const index = Armee1.indexOf(unite);
         if (index !== -1) {
             Armee1.splice(index, 1);
-            }
-            console.log('la troupe', unite.name, 'de larmée 1 est morte au combat !')
+        }
+        console.log('la troupe', unite.name, 'de larmée 1 est morte au combat !')
     }
 
 
-    if (unite.camp == 2){
+    if (unite.camp == 2) {
         const index = Armee2.indexOf(unite);
         if (index !== -1) {
             Armee2.splice(index, 1);
-            }
+        }
         console.log('la troupe', unite.name, 'de larmée 2 est morte au combat !')
     }
 
 
 }
 
-function action(unite, Armee1, Armee2){
+function action(unite, Armee1, Armee2) {
     if (unite.camp == 1) {
         ArmeeEnnemi = Armee2;
     }
@@ -232,17 +249,47 @@ function action(unite, Armee1, Armee2){
         ArmeeEnnemi = Armee1;
     }
     if (ArmeeEnnemi.length !== 0) {
-        cible = closestEnemi(unite,ArmeeEnnemi);
-        if (calculerDistance(unite,cible)<= unite.portee){
+        cible = closestEnemi(unite, ArmeeEnnemi);
+        if (calculerDistance(unite, cible) <= unite.portee) {
             Attaquer(unite, cible, Armee1, Armee2);
+        } else {
+            // pass both armies into avancer
+            avancer(unite, cible, Armee1, Armee2);
         }
-        else {
-            avancer(unite, cible);
-        }
-                    
+
     }
 }
-window.onload = function() {
+
+function animate_move_to(troop) {
+    const speed = 1;
+    const cellWidth = 80, cellHeight = 80, gap = 200;
+    function step() {
+        const currentLeft = parseFloat(troop.div.style.left);
+        const currentTop = parseFloat(troop.div.style.top);
+
+        // compute pixel target from grid coords
+        const targetLeft = troop.poscol <= 4
+            ? troop.poscol * cellWidth
+            : (troop.poscol - 5) * cellWidth + 5 * cellWidth + gap;
+        const targetTop = troop.posrow * cellHeight;
+
+        const deltaX = targetLeft - currentLeft;
+        const deltaY = targetTop - currentTop;
+        const distance = Math.hypot(deltaX, deltaY);
+
+        if (distance > speed) {
+            troop.div.style.left = `${currentLeft + (deltaX / distance) * speed}px`;
+            troop.div.style.top = `${currentTop + (deltaY / distance) * speed}px`;
+            requestAnimationFrame(step);
+        } else {
+            troop.div.style.left = `${targetLeft}px`;
+            troop.div.style.top = `${targetTop}px`;
+        }
+    }
+    step();
+}
+
+window.onload = function () {
     const params = new URLSearchParams(window.location.search);
     const placement = params.get('troop_placement');
     if (!placement) return;
@@ -283,7 +330,7 @@ window.onload = function() {
 
         const [player, pos, id] = entry.split(':');
         const [row, col] = pos.split('-').map(Number);
-        
+
         const name = idToName[parseInt(id, 10)];
         if (!name) return;
 
@@ -315,102 +362,74 @@ window.onload = function() {
 
         container.appendChild(troopDiv);
 
-        troops.push({player: parseInt(player, 10), div: troopDiv});
+        troops.push({ player: parseInt(player, 10), div: troopDiv });
         const nom = idToName[parseInt(id, 10)];
         if (player == '1') {
             posArmee1.push([row, col]);
             if (['1', '2', '3'].includes(id)) {
-                
-                Armee1.push(createUnit(nom,side = 'rome',col,row,camp = 1));
-            }
-            
-            if (['4', '5', '6'].includes(id)) {
+                let unit = createUnit(nom, side = 'rome', col, row, camp = 1);
+                unit.div = troopDiv;
 
-                Armee1.push(createUnit(nom,side = 'carthage',col,row, camp = 1));
+                Armee1.push(unit);
+            }
+
+            if (['4', '5', '6'].includes(id)) {
+                let unit = createUnit(nom, side = 'carthage', col, row, camp = 1);
+                unit.div = troopDiv;
+
+                Armee1.push(unit);
             }
         }
         if (player == '2') {
             posArmee2.push([row, col]);
             if (['1', '2', '3'].includes(id)) {
+                let unit = createUnit(nom, side = 'rome', col, row, camp = 2);
+                unit.div = troopDiv;
 
-                Armee2.push(createUnit(nom,side = 'rome', col,row, camp = 2));
+                Armee2.push(unit);
             }
             if (['4', '5', '6'].includes(id)) {
-
-                Armee2.push(createUnit(nom,side = 'carthage', col,row, camp = 2));
+                let unit = createUnit(nom, 'carthage', col, row, 2);
+                unit.div = troopDiv;
+                Armee2.push(unit);
             }
         }
-        
+
     });
     console.log('Armee1', Armee1);
-    console.log('Armee2',Armee2);
-    
-    // Animation
-    const speed = 1; // pixels par frame
+    console.log('Armee2', Armee2);
 
-    
-    while ( Armee1.length !== 0 && Armee2.length !== 0) {
-
-        var firsttoattack = Math.random();
-        
-        const maxLength = Math.max(Armee1.length, Armee2.length);
-
-        for (let i = 0; i < maxLength; i++) {
-            if (firsttoattack <= 0.5){
-                if (i < Armee1.length) {
-                    action(Armee1[i], Armee1, Armee2);
+    // battle simulation with delay between actions
+    async function runBattle() {
+        const delayMs = 2000;
+        while (Armee1.length && Armee2.length) {
+            const first = Math.random();
+            const maxLen = Math.max(Armee1.length, Armee2.length);
+            for (let i = 0; i < maxLen; i++) {
+                if (first <= 0.5) {
+                    if (i < Armee1.length) action(Armee1[i], Armee1, Armee2);
+                    if (i < Armee2.length) action(Armee2[i], Armee1, Armee2);
+                } else {
+                    if (i < Armee2.length) action(Armee2[i], Armee1, Armee2);
+                    if (i < Armee1.length) action(Armee1[i], Armee1, Armee2);
                 }
-                if (i < Armee2.length) {
-                    action(Armee2[i], Armee1, Armee2);
-                }
+                await sleep(delayMs);
+                if (!Armee1.length || !Armee2.length) break;
             }
-            if (firsttoattack >= 0.5){
-                if (i < Armee2.length) {
-                    action(Armee2[i], Armee1, Armee2);
-                }
-                if (i < Armee1.length) {
-                    action(Armee1[i], Armee1, Armee2);
-                }
-            }
-
         }
-
-        // if (firsttoattack <= 0.5){
-        //     Armee1.forEach(unite => {
-        //         action(unite, Armee1,Armee2);
-        //     })
-
-        //     Armee2.forEach(unite => {
-        //         action(unite, Armee1,Armee2);
-        //     })
-
-        // }
-        // if (firsttoattack >= 0.5){
-
-        //     Armee2.forEach(unite => {
-        //         action(unite, Armee1,Armee2);
-        //     })
-
-
-        //     Armee1.forEach(unite => {
-        //         action(unite, Armee1,Armee2);
-        //     })
-
-            
-
-        // }
-        if (Armee1.length == 0) {
-            console.log("Victoire de l'armée 2")
-
-        }
-
-        if (Armee2.length == 0) {
-            console.log("Victoire de l'armée 1")
-
-        }
-
-
+        console.log(Armee1.length
+            ? "Victoire de l'armée 1"
+            : "Victoire de l'armée 2"
+        );
     }
+
+    // helper for delaying execution
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    runBattle();
+
     function animate() {
         let movement = false;
         troops.forEach(troop => {
