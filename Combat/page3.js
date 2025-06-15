@@ -156,7 +156,7 @@ function closestEnemi(unite,ArmeeEnnemi) {
         }
     });
     if (ennemiLePlusProche != null){
-        console.log(`${unite.name} en ${unite.posrow},${unite.poscol} cible ${ennemiLePlusProche.name} en ${ennemiLePlusProche.posrow},${ennemiLePlusProche.poscol}`);
+        // console.log(`${unite.name} en ${unite.posrow},${unite.poscol} cible ${ennemiLePlusProche.name} en ${ennemiLePlusProche.posrow},${ennemiLePlusProche.poscol}`);
 
     }
     return ennemiLePlusProche;
@@ -222,6 +222,25 @@ function isDead(unite, Armee1, Armee2 ) {
     }
 
 
+}
+
+function action(unite, Armee1, Armee2){
+    if (unite.camp == 1) {
+        ArmeeEnnemi = Armee2;
+    }
+    if (unite.camp == 2) {
+        ArmeeEnnemi = Armee1;
+    }
+    if (ArmeeEnnemi.length !== 0) {
+        cible = closestEnemi(unite,ArmeeEnnemi);
+        if (calculerDistance(unite,cible)<= unite.portee){
+            Attaquer(unite, cible, Armee1, Armee2);
+        }
+        else {
+            avancer(unite, cible);
+        }
+                    
+    }
 }
 window.onload = function() {
     const params = new URLSearchParams(window.location.search);
@@ -333,70 +352,53 @@ window.onload = function() {
     while ( Armee1.length !== 0 && Armee2.length !== 0) {
 
         var firsttoattack = Math.random();
-        if (firsttoattack <= 0.5){
-            Armee1.forEach(unite => {
-                if (Armee2.length !== 0) {
-                    cible = closestEnemi(unite,Armee2);
-                    if (calculerDistance(unite,cible)<= unite.portee){
-                        Attaquer(unite, cible, Armee1, Armee2);
-                    }
-                    else {
-                        avancer(unite, cible);
-                    }
-                    
-                }
-            })
+        
+        const maxLength = Math.max(Armee1.length, Armee2.length);
 
-            Armee2.forEach(unite => {
-                if (Armee1.length !== 0) {
-                    cible = closestEnemi(unite,Armee1);
-                    if (calculerDistance(unite,cible)<= unite.portee){
-                        Attaquer(unite, cible, Armee1, Armee2);
-                    }
-                    else {
-                        avancer(unite, cible);
-                    }
-                    
+        for (let i = 0; i < maxLength; i++) {
+            if (firsttoattack <= 0.5){
+                if (i < Armee1.length) {
+                    action(Armee1[i], Armee1, Armee2);
                 }
-            })
+                if (i < Armee2.length) {
+                    action(Armee2[i], Armee1, Armee2);
+                }
+            }
+            if (firsttoattack >= 0.5){
+                if (i < Armee2.length) {
+                    action(Armee2[i], Armee1, Armee2);
+                }
+                if (i < Armee1.length) {
+                    action(Armee1[i], Armee1, Armee2);
+                }
+            }
 
         }
-        if (firsttoattack >= 0.5){
+
+        // if (firsttoattack <= 0.5){
+        //     Armee1.forEach(unite => {
+        //         action(unite, Armee1,Armee2);
+        //     })
+
+        //     Armee2.forEach(unite => {
+        //         action(unite, Armee1,Armee2);
+        //     })
+
+        // }
+        // if (firsttoattack >= 0.5){
+
+        //     Armee2.forEach(unite => {
+        //         action(unite, Armee1,Armee2);
+        //     })
 
 
-            Armee2.forEach(unite => {
-                
-                if (Armee1.length !== 0) {
-                    cible = closestEnemi(unite,Armee1);
-                    if (calculerDistance(unite,cible)<= unite.portee){
-                        Attaquer(unite, cible, Armee1, Armee2);
-                    }
-                    else {
-                        avancer(unite, cible);
-                    }
-                    
-                }
-            })
-
-
-            Armee1.forEach(unite => {
-                
-                if (Armee2.length !== 0) {
-                    cible = closestEnemi(unite,Armee2);
-                    if (calculerDistance(unite,cible)<= unite.portee){
-                        Attaquer(unite, cible, Armee1, Armee2);
-                    }
-                    else {
-                        avancer(unite, cible);
-                    }
-                    
-                }
-            })
+        //     Armee1.forEach(unite => {
+        //         action(unite, Armee1,Armee2);
+        //     })
 
             
 
-        }
-    
+        // }
         if (Armee1.length == 0) {
             console.log("Victoire de l'armée 2")
 
