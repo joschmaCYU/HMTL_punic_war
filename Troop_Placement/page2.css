@@ -41,7 +41,7 @@ h1 {
     animation: h1 2s ease-in forwards;
 }
 
-/* Animation */
+
 @keyframes h1 {
   to {
     opacity: 1;

@@ -40,8 +40,17 @@ h1 {
     margin-bottom: 25px;
     text-align: center;
     color: #321b0d;
-    font-size: 4.7rem; /* ou 48px, ou 300% */
+    font-size: 4.7rem;
+    opacity: 0;
+    animation: h1 2s ease-in forwards;
   }
+
+  @keyframes h1 {
+  to {
+    opacity: 1;
+  }
+}
+
 
   h2 {
     background-color: #8b5e3c;
@@ -88,6 +97,34 @@ p {
     
 }
 
+#player1-selection {
+  opacity: 0;
+  transform: translateX(100px);
+  animation: slideFadeInPlayer1  2.4s cubic-bezier(0.25, 1, 0.5, 1) 1s forwards;
+}
+
+/* Animation */
+@keyframes slideFadeInPlayer1 {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+#player2-selection {
+  opacity: 0;
+  transform: translateX(-100px); /* décalé à gauche */
+  animation: slideFadeInPlayer2 2.4s cubic-bezier(0.25, 1, 0.5, 1) 1s forwards;
+}
+
+/* Animation */
+@keyframes slideFadeInPlayer2 {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
 .faction-selector {
     display: flex;
     align-items: center;
@@ -131,28 +168,37 @@ button:hover {
 
 
 #start-game {
-    width: 200px;
-    height: 70px;
-    cursor: pointer;
-    color: #fff;
-    font-size: 20px;
-    border-radius: 1rem;
-    border: none;
-    background: #8b5e3c;
-    transition: 0.1s; 
-    position: relative;
-    align-content: center; 
-    z-index: 10;
-    font-family: 'Greconian', serif;
+  width: 200px;
+  height: 70px;
+  cursor: pointer;
+  color: #fff;
+  font-size: 20px;
+  border-radius: 1rem;
+  border: none;
+  background: #8b5e3c;
+  position: relative;
+  align-content: center;
+  z-index: 10;
+  font-family: 'Greconian', serif;
+  opacity: 0;
+  transform: translateY(100px) scale(1);
+  animation: slideFadeInStartButton 1.5s cubic-bezier(0.25, 1, 0.5, 1) 1.4s forwards;
+  transition: transform 0.3s ease, background 0.3s ease;
 }
 
+@keyframes slideFadeInStartButton {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
 
 
 #start-game:hover {
-    transform: scale(0.9);
-    background: radial-gradient(circle at 10% 20%, #c8a068 20%, #f3844c 100%);
-    transition: 0.5s;
+  transform: translateY(0) scale(0.9);
+  background: radial-gradient(circle at 10% 20%, #c8a068 20%, #f3844c 100%);
 }
+
 
 
 select {
