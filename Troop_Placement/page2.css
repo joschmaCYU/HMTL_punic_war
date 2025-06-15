@@ -17,6 +17,9 @@
   pointer-events: none;
 }
 
+
+
+
 body {
     font-family: 'Cinzel', serif;
     margin-top: 90px;
@@ -34,6 +37,15 @@ h1 {
     font-family: 'Greconian', sans-serif;
     margin-top: 5px;
     margin-bottom: 2px;
+    opacity: 0;
+    animation: h1 2s ease-in forwards;
+}
+
+/* Animation */
+@keyframes h1 {
+  to {
+    opacity: 1;
+  }
 }
 
 
