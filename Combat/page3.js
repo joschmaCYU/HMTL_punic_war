@@ -228,6 +228,7 @@ function action(unite, Armee1, Armee2) {
         cible = closestEnemi(unite, ArmeeEnnemi);
         if (computeDistance(unite, cible) <= unite.portee) {
             attack(unite, cible, Armee1, Armee2);
+            // TODO afficher un GIF après l'attaque
         } else {
             move(unite, cible, Armee1, Armee2);
         }
