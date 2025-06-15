@@ -37,4 +37,4 @@ function validateFaction(playerId) {
     const selected = factions[playerSelections[playerId]].factionName;
     alert(`${playerId} a choisi : ${selected}`);
 }
-
+    
