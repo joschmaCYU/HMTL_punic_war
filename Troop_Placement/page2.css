@@ -13,7 +13,7 @@
   width: 100vw;
   height: 100vh;
   object-fit: cover;
-  z-index: -1; /* derrière le contenu */
+  z-index: -1; 
   pointer-events: none;
 }
 

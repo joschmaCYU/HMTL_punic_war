@@ -17,13 +17,19 @@ body {
 }
 
 #battlefield {
-    margin: 40px auto;
+    margin: 30px auto;
 }
 
 h3 {
+    color: #321b0d;
     font-family: 'Greconian', sans-serif;
     margin-top: 5px;
+    margin-left: 60px;
+    margin-right: 60px;
+    
 }
+
+
 
 #previous-page {
   position: fixed;
@@ -46,7 +52,7 @@ h3 {
 }
 
 #previous-page {
-  transform: scale(0.9);
+    transform: scale(0.9);
     background: radial-gradient(circle at 10% 20%, #c8a068 20%, #f3844c 100%);
     transition: 0.5s;
 }
