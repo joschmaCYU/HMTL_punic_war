@@ -115,23 +115,23 @@ function createUnit(unitKey, side, poscol, posrow, camp) {
 }
 
 function closestEnemi(unite, ArmeeEnnemi) {
-    let ennemiLePlusProche = null;
-    let distanceMinimale = Infinity;
+    let closestEnemy = null;
+    let minDistance = Infinity;
 
     ArmeeEnnemi.forEach(ennemi => {
         const deltaRow = ennemi.posrow - unite.posrow;
         const deltaCol = ennemi.poscol - unite.poscol;
         const distance = Math.hypot(deltaRow, deltaCol);
 
-        if (distance < distanceMinimale) {
-            distanceMinimale = distance;
-            ennemiLePlusProche = ennemi;
+        if (distance < minDistance) {
+            minDistance = distance;
+            closestEnemy = ennemi;
         }
     });
-    if (ennemiLePlusProche != null) {
+    if (closestEnemy != null) {
         // console.log(`${unite.name} en ${unite.posrow},${unite.poscol} cible ${ennemiLePlusProche.name} en ${ennemiLePlusProche.posrow},${ennemiLePlusProche.poscol}`);
     }
-    return ennemiLePlusProche;
+    return closestEnemy;
 }
 
 
