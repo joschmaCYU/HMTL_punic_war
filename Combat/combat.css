@@ -46,6 +46,7 @@ h3 {
 }
 
 #previous-page {
-  background: radial-gradient(circle at 10% 20%, #c8a068 20%, #f3844c 100%);
-  transform: scale(1.1);
+  transform: scale(0.9);
+    background: radial-gradient(circle at 10% 20%, #c8a068 20%, #f3844c 100%);
+    transition: 0.5s;
 }
