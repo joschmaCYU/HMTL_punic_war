@@ -401,7 +401,7 @@ window.onload = function () {
 
     // battle simulation with delay between actions
     async function runBattle() {
-        const delayMs = 2000;
+        const delayMs = 500;
         while (Armee1.length && Armee2.length) {
             const first = Math.random();
             const maxLen = Math.max(Armee1.length, Armee2.length);
