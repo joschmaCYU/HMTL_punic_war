@@ -6,7 +6,6 @@ function startGame() {
     window.location.href = `Troop_Placement/page2.html?player1Faction=${player1Faction}&player2Faction=${player2Faction}`;
 }
 
-
 const factions = [
     { factionName: "rome", img: "image/bouclier_rouge.png" },
     { factionName: "carthage", img: "image/bouclier_bleu.png" }
@@ -37,4 +36,3 @@ function validateFaction(playerId) {
     const selected = factions[playerSelections[playerId]].factionName;
     alert(`${playerId} a choisi : ${selected}`);
 }
-    

@@ -113,31 +113,6 @@ function createUnit(unitKey, side, poscol, posrow, camp) {
     // Utilisation de structuredClone pour éviter une simple référence
     return structuredClone(baseUnit);
 }
-function mouvementInfanterie(troopDiv, targetX, targetY, speed) {
-    const currentX = parseFloat(troopDiv.style.left);
-    const currentY = parseFloat(troopDiv.style.top);
-
-    const deltaX = targetX - currentX;
-    const deltaY = targetY - currentY;
-
-    const distance = Math.hypot(deltaX, deltaY);
-
-    if (distance < speed) {
-        troopDiv.style.left = `${targetX}px`;
-        troopDiv.style.top = `${targetY}px`;
-        return;
-    }
-
-    const stepX = (deltaX / distance) * speed;
-    const stepY = (deltaY / distance) * speed;
-
-    troopDiv.style.left = `${currentX + stepX}px`;
-    troopDiv.style.top = `${currentY + stepY}px`;
-
-    requestAnimationFrame(mouvementInfanterie);
-}
-
-
 
 function closestEnemi(unite, ArmeeEnnemi) {
     let ennemiLePlusProche = null;
@@ -155,64 +130,67 @@ function closestEnemi(unite, ArmeeEnnemi) {
     });
     if (ennemiLePlusProche != null) {
         // console.log(`${unite.name} en ${unite.posrow},${unite.poscol} cible ${ennemiLePlusProche.name} en ${ennemiLePlusProche.posrow},${ennemiLePlusProche.poscol}`);
-
     }
     return ennemiLePlusProche;
 }
 
 
-function calculerDistance(unite, ennemi) {
+function computeDistance(unite, ennemi) {
     const deltaRow = unite.posrow - ennemi.posrow;
     const deltaCol = unite.poscol - ennemi.poscol;
     return Math.floor(Math.hypot(deltaRow, deltaCol));
 }
 
-function avancer(unite, ennemi, Armee1, Armee2) {
+function move(unite, ennemi, Armee1, Armee2) {
+    const maxSteps = unite.vitesse;
     console.log("la troupe", unite.name, "en", unite.posrow, unite.poscol);
 
-    for (let i = 1; i <= unite.vitesse; i++) {
-        const deltaRow = ennemi.posrow - unite.posrow;
-        const deltaCol = ennemi.poscol - unite.poscol;
-        let nextRow = unite.posrow, nextCol = unite.poscol;
-
-        if (deltaRow !== 0) {
-            nextRow += deltaRow / Math.abs(deltaRow);
-        } else if (deltaCol !== 0) {
-            nextCol += deltaCol / Math.abs(deltaCol);
+    for (let step = 0; step < maxSteps; step++) {
+        const currDist = computeDistance(unite, ennemi);
+        // try all four directions
+        const deltas = [
+            { dr:  1, dc:  0 },
+            { dr: -1, dc:  0 },
+            { dr:  0, dc:  1 },
+            { dr:  0, dc: -1 }
+        ];
+        // collect moves that reduce distance and are not occupied
+        const candidates = deltas
+            .map(d => ({
+                row: unite.posrow + d.dr,
+                col: unite.poscol + d.dc,
+                dist: Math.hypot((unite.posrow + d.dr) - ennemi.posrow,
+                                 (unite.poscol + d.dc) - ennemi.poscol)
+            }))
+            .filter(m =>
+                m.dist < currDist &&
+                ![...Armee1, ...Armee2].some(u => u !== unite && u.posrow === m.row && u.poscol === m.col)
+            );
+        if (candidates.length === 0) {
+            // no better free cell: stop trying further
+            console.log("is blocked");
+            return;
         }
-
-        // collision check: any other unit in same cell?
-        const occupied = [...Armee1, ...Armee2].some(u =>
-            u !== unite && u.posrow === nextRow && u.poscol === nextCol
-        );
-        if (occupied) {
-            console.log(unite.name, "est bloqué");
-            return; // blocked, stop movement
-        }
-
-        // apply move since free
-        unite.posrow = nextRow;
-        unite.poscol = nextCol;
+        // pick first (or randomize: candidates[Math.floor(Math.random()*candidates.length)])
+        const move = candidates[0];
+        unite.posrow = move.row;
+        unite.poscol = move.col;
+        console.log("se déplace en", unite.posrow, unite.poscol);
     }
-
     animate_move_to(unite);
-    console.log("se déplace en", unite.posrow, unite.poscol);
 }
 
-function Attaquer(unite, ennemi, Armee1, Armee2) {
-
+function attack(unite, ennemi, Armee1, Armee2) {
     let degat = unite.attack;
+
     if (ennemi.morale <= 3 && unite.morale >= 5) {
         degat += 2;
     }
-
     ennemi.health -= degat;
 
-
     console.log(unite.name, 'attaque', ennemi.name, "qui se retrouve avec", ennemi.health, 'pv');
-
+    
     if (ennemi.health <= 0) {
-
         isDead(ennemi, Armee1, Armee2);
     }
 }
@@ -221,6 +199,7 @@ function isDead(unite, Armee1, Armee2) {
     if (unite.div) {
         unite.div.style.display = 'none';
     }
+
     if (unite.camp == 1) {
         const index = Armee1.indexOf(unite);
         if (index !== -1) {
@@ -229,7 +208,6 @@ function isDead(unite, Armee1, Armee2) {
         console.log('la troupe', unite.name, 'de larmée 1 est morte au combat !')
     }
 
-
     if (unite.camp == 2) {
         const index = Armee2.indexOf(unite);
         if (index !== -1) {
@@ -237,8 +215,6 @@ function isDead(unite, Armee1, Armee2) {
         }
         console.log('la troupe', unite.name, 'de larmée 2 est morte au combat !')
     }
-
-
 }
 
 function action(unite, Armee1, Armee2) {
@@ -250,13 +226,11 @@ function action(unite, Armee1, Armee2) {
     }
     if (ArmeeEnnemi.length !== 0) {
         cible = closestEnemi(unite, ArmeeEnnemi);
-        if (calculerDistance(unite, cible) <= unite.portee) {
-            Attaquer(unite, cible, Armee1, Armee2);
+        if (computeDistance(unite, cible) <= unite.portee) {
+            attack(unite, cible, Armee1, Armee2);
         } else {
-            // pass both armies into avancer
-            avancer(unite, cible, Armee1, Armee2);
+            move(unite, cible, Armee1, Armee2);
         }
-
     }
 }
 
@@ -429,26 +403,6 @@ window.onload = function () {
     }
 
     runBattle();
-
-    function animate() {
-        let movement = false;
-        troops.forEach(troop => {
-            const currentLeft = parseFloat(troop.div.style.left);
-            if (troop.player === 1 && currentLeft + cellWidth < 500) {
-                troop.div.style.left = `${currentLeft + speed}px`;
-                movement = true;
-            } else if (troop.player === 2 && currentLeft > 500) {
-                troop.div.style.left = `${currentLeft - speed}px`;
-                movement = true;
-            }
-        });
-
-        if (movement) {
-            requestAnimationFrame(animate);
-        }
-    }
-
-    // animate();
 };
 
 // Ajouter la fonction "page précédente"
