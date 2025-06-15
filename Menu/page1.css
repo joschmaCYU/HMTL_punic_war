@@ -67,7 +67,17 @@ p {
   color: #ffffff;
 
 }
-  
+
+#player1-image {
+    width: 150px;
+    height: 250px;
+  }
+
+#player2-image {
+    width: 150px;
+    height: 250px;
+  }
+
 
 .textejoueur {
 
