@@ -183,6 +183,8 @@ function move(unite, ennemi, Armee1, Armee2) {
 function attack(unite, ennemi, Armee1, Armee2) {
     let degat = unite.attack;
 
+    animate_attack(unite, ennemi);
+
     if (ennemi.morale <= 3 && unite.morale >= 5) {
         degat += 2;
     }
@@ -192,6 +194,65 @@ function attack(unite, ennemi, Armee1, Armee2) {
     
     if (ennemi.health <= 0) {
         isDead(ennemi, Armee1, Armee2);
+    }
+}
+
+function animate_attack(unite, ennemi) {
+    // arrow animation for Archers
+    if (unite.name === 'Archer') {
+        const battlefield = document.getElementById('battlefield');
+        const arrowImg = document.createElement('img');
+        arrowImg.src = '../image/arrow.png';
+        arrowImg.style.position = 'absolute';
+        arrowImg.style.width = '60px';
+        arrowImg.style.height = '20px';
+        arrowImg.style.zIndex = '1000';
+        arrowImg.style.transformOrigin = 'center center';       // set rotation origin
+        arrowImg.style.transition = 'left 0.3s linear, top 0.3s linear';
+        // start at archer’s pixel coords
+        arrowImg.style.left = unite.div.style.left;
+        arrowImg.style.top  = unite.div.style.top;
+        battlefield.appendChild(arrowImg);
+        // compute angle toward enemy
+        const startX = parseFloat(arrowImg.style.left);
+        const startY = parseFloat(arrowImg.style.top);
+        const targetX = parseFloat(ennemi.div.style.left);
+        const targetY = parseFloat(ennemi.div.style.top);
+        const angleDeg = Math.atan2(targetY - startY, targetX - startX) * 180 / Math.PI;
+        arrowImg.style.transform = `rotate(${angleDeg}deg)`;   // rotate arrow
+        // force reflow then animate position
+        void arrowImg.offsetWidth;
+        arrowImg.style.left = ennemi.div.style.left;
+        arrowImg.style.top  = ennemi.div.style.top;
+        arrowImg.addEventListener('transitionend', () => arrowImg.remove());
+    } else {
+        // TODO afficher un GIF après l'attaque
+        // afficher un nuage de combat entre les deux unités
+        const battlefield = document.getElementById('battlefield')
+        const cloud = document.createElement('img')
+        cloud.src = '../image/cloud_combat.gif'
+        cloud.style.position = 'absolute'
+        cloud.style.width  = '200px'
+        cloud.style.height = '80px'
+        cloud.style.zIndex = '1000'
+
+        // calculer le point médian entre attaquant et défenseur
+        const ax = parseFloat(unite.div.style.left)
+        const ay = parseFloat(unite.div.style.top)
+        const bx = parseFloat(ennemi.div.style.left)
+        const by = parseFloat(ennemi.div.style.top)
+        const mx = (ax + bx) / 2 - 40  // centrer le GIF (80/2)
+        const my = (ay + by) / 2 - 0
+
+        cloud.style.left = `${mx}px`
+        cloud.style.top  = `${my}px`
+
+        battlefield.appendChild(cloud)
+
+        // supprimer le nuage après la courte animation
+        setTimeout(() => {
+            if (cloud.parentNode) battlefield.removeChild(cloud)
+        }, 500)
     }
 }
 
@@ -228,7 +289,6 @@ function action(unite, Armee1, Armee2) {
         cible = closestEnemi(unite, ArmeeEnnemi);
         if (computeDistance(unite, cible) <= unite.portee) {
             attack(unite, cible, Armee1, Armee2);
-            // TODO afficher un GIF après l'attaque
         } else {
             move(unite, cible, Armee1, Armee2);
         }
@@ -392,10 +452,7 @@ window.onload = function () {
                 if (!Armee1.length || !Armee2.length) break;
             }
         }
-        console.log(Armee1.length
-            ? "Victoire de l'armée 1"
-            : "Victoire de l'armée 2"
-        );
+        showWinScreen(Armee1.length ? 'armée 1' : 'armée 2');
     }
 
     // helper for delaying execution
@@ -412,4 +469,31 @@ function goToPreviousPage() {
     const p1 = params.get('player1Faction');
     const p2 = params.get('player2Faction');
     window.location.href = `../Troop_Placement/page2.html?player1Faction=${p1}&player2Faction=${p2}`;
+}
+
+// ajout : écran de victoire
+function showWinScreen(winner) {
+    const overlay = document.createElement('div');
+    overlay.id = 'win-screen';
+    overlay.style.position = 'fixed';
+    overlay.style.top = '0';
+    overlay.style.left = '0';
+    overlay.style.width = '100vw';
+    overlay.style.height = '100vh';
+    overlay.style.background = 'rgba(0,0,0,0.8)';
+    overlay.style.zIndex = '9999';
+    overlay.style.display = 'flex';
+    overlay.style.flexDirection = 'column';
+    overlay.style.justifyContent = 'center';
+    overlay.style.alignItems = 'center';
+    overlay.style.color = '#fff';
+    overlay.style.fontSize = '2rem';
+    overlay.innerHTML = `
+        <div class="victory">Victoire de ${winner} !</div>
+        <button class="btn" id="restart-btn" style="margin:20px;padding:10px 20px;font-size:1rem;">Rejouer</button>
+        <button class="btn" id="placement-btn" style="margin:20px;padding:10px 20px;font-size:1rem;">Retour Placement</button>
+    `;
+    document.body.appendChild(overlay);
+    document.getElementById('restart-btn').onclick = () => location.reload();
+    document.getElementById('placement-btn').onclick = goToPreviousPage;
 }

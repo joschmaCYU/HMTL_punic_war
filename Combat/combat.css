@@ -56,3 +56,56 @@ h3 {
     background: radial-gradient(circle at 10% 20%, #c8a068 20%, #f3844c 100%);
     transition: 0.5s;
 }
+
+.victory {
+  font-family: 'Greconian', serif;
+}
+
+.button-group {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 20px;
+  }
+  
+  .btn {
+    width: 150px;
+    height: 50px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 17px;
+    border-radius: 1rem;
+    border: none;
+    background: #8b5e3c;
+    transition: 0.1s;
+    position: relative;
+    z-index: 10;
+    font-family: 'Greconian', serif;
+  }
+  
+  
+  .btn:hover {
+    transform: scale(0.9);
+    background: radial-gradient(circle at 10% 20%, #c8a068 20%, #f3844c 100%);
+    transition: 0.5s;
+  }
+  
+  .round-btn {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  width: 50px;
+  height: 50px;
+  background-color: #8b5e3c;
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  line-height: 50px;
+  border-radius: 50%;
+  text-decoration: none;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  transition: transform 0.2s ease, background 0.3s ease;
+  z-index: 100;
+  font-family: 'Cinzel', serif;
+}
