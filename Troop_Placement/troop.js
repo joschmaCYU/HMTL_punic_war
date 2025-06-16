@@ -168,8 +168,9 @@ function handleDragStart(e) {
 
 function handleDrop(e, row, col, cell) {
     e.preventDefault();
-    const troopId = e.dataTransfer.getData('text/plain');
+    // on récupère si l’on vient d’une cellule et l’ID de la troupe
     const fromPos = e.dataTransfer.getData('from-cell');
+    const troopId = e.dataTransfer.getData('text/plain');
     const troop = document.getElementById(troopId);
     const player = cell.dataset.allowedPlayer;
 
@@ -178,6 +179,26 @@ function handleDrop(e, row, col, cell) {
 
     // Ne supprime pas la troupe existante sur la case
     while (cell.firstChild) {
+        return;
+    }
+    // si nouveau placement depuis la liste, on clone l’image
+    if (!fromPos) {
+        const name = troop.dataset.name;
+        const cntObj = getTroopCounts(player).find(o => o[name] !== undefined);
+        if (cntObj) {
+            cntObj[name]--;
+            // rafraîchir la liste latérale
+            initTroopList(player, selectedFactions[player]);
+            // cloner l’élément pour le plateau
+            const clone = troop.cloneNode(true);
+            clone.id = `${troopId}-${row}-${col}`;
+            clone.draggable = true;
+            clone.dataset.player = troop.dataset.player;
+            clone.addEventListener('dragstart', handleDragStart);
+            cell.appendChild(clone);
+            troopPositions[`${row}-${col}`] = clone.id;
+            updateTroopTable(getPlayerLabel(player), name, `${row}-${col}`);
+        }
         return;
     }
 

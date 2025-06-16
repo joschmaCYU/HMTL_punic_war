@@ -141,7 +141,7 @@ function computeDistance(unite, ennemi) {
     return Math.floor(Math.hypot(deltaRow, deltaCol));
 }
 
-function move(unite, ennemi, Armee1, Armee2) {
+async function move(unite, ennemi, Armee1, Armee2) {
     const maxSteps = unite.vitesse;
     console.log("la troupe", unite.name, "en", unite.posrow, unite.poscol);
 
@@ -177,7 +177,8 @@ function move(unite, ennemi, Armee1, Armee2) {
         unite.poscol = move.col;
         console.log("se déplace en", unite.posrow, unite.poscol);
     }
-    animate_move_to(unite);
+    // return a promise that resolves when the DOM animation finishes
+    return animate_move_to(unite);
 }
 
 function attack(unite, ennemi, Armee1, Armee2) {
@@ -241,8 +242,8 @@ function animate_attack(unite, ennemi) {
         const ay = parseFloat(unite.div.style.top)
         const bx = parseFloat(ennemi.div.style.left)
         const by = parseFloat(ennemi.div.style.top)
-        const mx = (ax + bx) / 2 - 40  // centrer le GIF (80/2)
-        const my = (ay + by) / 2 - 0
+        const mx = (ax + bx) / 2 - 60  // centrer le GIF (80/2)
+        const my = (ay + by) / 2
 
         cloud.style.left = `${mx}px`
         cloud.style.top  = `${my}px`
@@ -278,50 +279,55 @@ function isDead(unite, Armee1, Armee2) {
     }
 }
 
-function action(unite, Armee1, Armee2) {
-    if (unite.camp == 1) {
-        ArmeeEnnemi = Armee2;
-    }
-    if (unite.camp == 2) {
-        ArmeeEnnemi = Armee1;
-    }
-    if (ArmeeEnnemi.length !== 0) {
-        cible = closestEnemi(unite, ArmeeEnnemi);
-        if (computeDistance(unite, cible) <= unite.portee) {
-            attack(unite, cible, Armee1, Armee2);
-        } else {
-            move(unite, cible, Armee1, Armee2);
-        }
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function action(unite, Armee1, Armee2) {
+    let ArmeeEnnemi;
+    if (unite.camp == 1) ArmeeEnnemi = Armee2;
+    if (unite.camp == 2) ArmeeEnnemi = Armee1;
+    if (!ArmeeEnnemi.length) return;
+    const cible = closestEnemi(unite, ArmeeEnnemi);
+    if (computeDistance(unite, cible) <= unite.portee) {
+        attack(unite, cible, Armee1, Armee2);
+        await sleep(500);    // pause de 500 ms après l’attaque
+    } else {
+        await move(unite, cible, Armee1, Armee2);
     }
 }
 
+// wrap animate_move_to in a Promise so we can wait for the action
 function animate_move_to(troop) {
-    const speed = 1;
-    const cellWidth = 80, cellHeight = 80, gap = 200;
-    function step() {
-        const currentLeft = parseFloat(troop.div.style.left);
-        const currentTop = parseFloat(troop.div.style.top);
+    return new Promise(resolve => {
+        const speed = 1;
+        const cellWidth = 80, cellHeight = 80, gap = 200;
+        function step() {
+            const currentLeft = parseFloat(troop.div.style.left);
+            const currentTop = parseFloat(troop.div.style.top);
 
-        // compute pixel target from grid coords
-        const targetLeft = troop.poscol <= 4
-            ? troop.poscol * cellWidth
-            : (troop.poscol - 5) * cellWidth + 5 * cellWidth + gap;
-        const targetTop = troop.posrow * cellHeight;
+            // compute pixel target from grid coords
+            const targetLeft = troop.poscol <= 4
+                ? troop.poscol * cellWidth
+                : (troop.poscol - 5) * cellWidth + 5 * cellWidth + gap;
+            const targetTop = troop.posrow * cellHeight;
 
-        const deltaX = targetLeft - currentLeft;
-        const deltaY = targetTop - currentTop;
-        const distance = Math.hypot(deltaX, deltaY);
+            const deltaX = targetLeft - currentLeft;
+            const deltaY = targetTop - currentTop;
+            const distance = Math.hypot(deltaX, deltaY);
 
-        if (distance > speed) {
-            troop.div.style.left = `${currentLeft + (deltaX / distance) * speed}px`;
-            troop.div.style.top = `${currentTop + (deltaY / distance) * speed}px`;
-            requestAnimationFrame(step);
-        } else {
-            troop.div.style.left = `${targetLeft}px`;
-            troop.div.style.top = `${targetTop}px`;
+            if (distance > speed) {
+                troop.div.style.left = `${currentLeft + (deltaX / distance) * speed}px`;
+                troop.div.style.top = `${currentTop + (deltaY / distance) * speed}px`;
+                requestAnimationFrame(step);
+            } else {
+                troop.div.style.left = `${targetLeft}px`;
+                troop.div.style.top = `${targetTop}px`;
+                resolve();
+            }
         }
-    }
-    step();
+        step();
+    });
 }
 
 window.onload = function () {
@@ -357,12 +363,10 @@ window.onload = function () {
     const posArmee1 = [];
     const posArmee2 = [];
 
-
     var Armee1 = [];
     var Armee2 = [];
 
     placement.split(',').forEach(entry => {
-
         const [player, pos, id] = entry.split(':');
         const [row, col] = pos.split('-').map(Number);
 
@@ -431,33 +435,26 @@ window.onload = function () {
         }
 
     });
-    console.log('Armee1', Armee1);
-    console.log('Armee2', Armee2);
+    console.log('Armee1 :', JSON.parse(JSON.stringify(Armee1)));
+    console.log('Armee2 :', JSON.parse(JSON.stringify(Armee2)));
 
     // battle simulation with delay between actions
     async function runBattle() {
-        const delayMs = 500;
         while (Armee1.length && Armee2.length) {
             const first = Math.random();
             const maxLen = Math.max(Armee1.length, Armee2.length);
             for (let i = 0; i < maxLen; i++) {
                 if (first <= 0.5) {
-                    if (i < Armee1.length) action(Armee1[i], Armee1, Armee2);
-                    if (i < Armee2.length) action(Armee2[i], Armee1, Armee2);
+                    if (i < Armee1.length) await action(Armee1[i], Armee1, Armee2);
+                    if (i < Armee2.length) await action(Armee2[i], Armee1, Armee2);
                 } else {
-                    if (i < Armee2.length) action(Armee2[i], Armee1, Armee2);
-                    if (i < Armee1.length) action(Armee1[i], Armee1, Armee2);
+                    if (i < Armee2.length) await action(Armee2[i], Armee1, Armee2);
+                    if (i < Armee1.length) await action(Armee1[i], Armee1, Armee2);
                 }
-                await sleep(delayMs);
                 if (!Armee1.length || !Armee2.length) break;
             }
         }
         showWinScreen(Armee1.length ? 'armée 1' : 'armée 2');
-    }
-
-    // helper for delaying execution
-    function sleep(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
     }
 
     runBattle();
