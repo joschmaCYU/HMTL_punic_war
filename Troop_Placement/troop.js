@@ -178,23 +178,25 @@ function handleDrop(e, row, col, cell) {
     if (!troop || troop.dataset.player !== player) return;
 
     // Ne supprime pas la troupe existante sur la case
-    while (cell.firstChild) {
+    if (cell.firstChild) {
         return;
     }
-    // si nouveau placement depuis la liste, on clone l’image
+
     if (!fromPos) {
         const name = troop.dataset.name;
         const cntObj = getTroopCounts(player).find(o => o[name] !== undefined);
         if (cntObj) {
             cntObj[name]--;
-            // rafraîchir la liste latérale
+            // si nouveau placement depuis la liste, on clone l’image
             initTroopList(player, selectedFactions[player]);
+
             // cloner l’élément pour le plateau
             const clone = troop.cloneNode(true);
             clone.id = `${troopId}-${row}-${col}`;
             clone.draggable = true;
             clone.dataset.player = troop.dataset.player;
             clone.addEventListener('dragstart', handleDragStart);
+            clone.addEventListener('dragend', handleDragEnd);
             cell.appendChild(clone);
             troopPositions[`${row}-${col}`] = clone.id;
             updateTroopTable(getPlayerLabel(player), name, `${row}-${col}`);
@@ -202,50 +204,42 @@ function handleDrop(e, row, col, cell) {
         return;
     }
 
-    // Si la troupe si elle est sur le plateau
-    if (fromPos) {
-        const oldCell = document.querySelector(`.grid-cell[data-row="${fromPos.split('-')[0]}"][data-col="${fromPos.split('-')[1]}"]`);
-        if (oldCell && oldCell.firstChild && oldCell.firstChild.id === troopId) {
-            oldCell.removeChild(oldCell.firstChild);
-            delete troopPositions[fromPos];
-        }
-    } else {
-        const name = troop.dataset.name;
-        const cntObj = getTroopCounts(player).find(o => o[name] !== undefined);
-        if (cntObj) {
-            cntObj[name]--;
-            const newCount = cntObj[name];
-            const wrapper = troop.parentNode;
-            const badge = wrapper.querySelector('.troop-count');
-            badge.textContent = `x${newCount}`;
-
-            troop.dataset.count = newCount;
-            troop.title = `${name} (${newCount})`;
-            // ne supprime l’icône que si le compte atteint 0
-            if (newCount <= 0) {
-                const wrapper = troop.parentNode;
-                wrapper.remove();
-            } else {
-                const list = document.getElementById(`${player}-troop-list`);
-                list.innerHTML = '';
-                list.style.display = 'flex';
-                list.style.flexDirection = 'column';
-                list.style.alignItems = player === 'player1' ? 'flex-start' : 'flex-end';
-                const faction = selectedFactions[player];
-                factions[faction].forEach((troopName, idx) => {
-                    const countObj = getTroopCounts(player).find(o => o[troopName] !== undefined);
-                    if (countObj && countObj[troopName] > 0) {
-                        list.appendChild(createTroop(player, troopName, idx));
-                    }
-                });
-            }
-        }
+    // Enlève l'ancienne troop
+    const oldCell = document.querySelector(`.grid-cell[data-row="${fromPos.split('-')[0]}"][data-col="${fromPos.split('-')[1]}"]`);
+    if (oldCell && oldCell.firstChild && oldCell.firstChild.id === troopId) {
+        oldCell.removeChild(oldCell.firstChild);
+        delete troopPositions[fromPos];
     }
 
     // Ajouter la troupe dans la nouvelle case
     cell.appendChild(troop);
+    troop.addEventListener('dragend', handleDragEnd);
     troopPositions[`${row}-${col}`] = troopId;
     updateTroopTable(getPlayerLabel(player), troop.textContent, `${row}-${col}`);
+}
+
+//remove a troop if dropped outside any grid cell
+function handleDragEnd(e) {
+    const fromPos = e.dataTransfer.getData('from-cell');
+    if (fromPos && e.dataTransfer.dropEffect === 'none') {
+        const [row, col] = fromPos.split('-');
+        const cell = document.querySelector(
+            `.grid-cell[data-row="${row}"][data-col="${col}"]`
+        );
+        const troop = document.getElementById(e.target.id);
+        if (cell && troop && cell.firstChild === troop) {
+            cell.removeChild(troop);
+            delete troopPositions[fromPos];
+            
+            const player = cell.dataset.allowedPlayer;
+            const name = troop.dataset.name;
+            const cntObj = getTroopCounts(player).find(o => o[name] !== undefined);
+            if (cntObj) {
+                cntObj[name]++;
+                initTroopList(player, selectedFactions[player]);
+            }
+        }
+    }
 }
 
 function getTroopQuery() {
@@ -265,16 +259,6 @@ function getTroopQuery() {
 function updateTroopTable(player, name, position) {
     const row = document.createElement('tr');
     row.innerHTML = `<td>${player}</td><td>${name}</td><td>${position}</td>`;
-}
-
-function updateTroopTableFromPositions() {
-    Object.entries(troopPositions).forEach(([pos, id]) => {
-        const troop = document.getElementById(id);
-        const name = troop?.textContent || 'Inconnu';
-        const player = getPlayerLabel(id.startsWith('player1') ? 'player1' : 'player2');
-        console.log(`Position: ${pos}, ID: ${id}, Player: ${player}, Name: ${name}`);
-        updateTroopTable(player, name, pos);
-    });
 }
 
 // ------------------ UTILS ------------------
@@ -310,7 +294,7 @@ function startCombat() {
     const query = getTroopQuery();
     console.log(`Démarrer le combat avec les troupes : ${query}`);
     window.location.href = `../Combat/page_combat.html?troop_placement=${query}&player1Faction=${p1}&player2Faction=${p2}`;
-    
+
 }
 
 // ------------------ RUN ------------------
