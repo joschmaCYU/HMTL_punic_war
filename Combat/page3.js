@@ -147,37 +147,50 @@ async function move(unite, ennemi, Armee1, Armee2) {
 
     for (let step = 0; step < maxSteps; step++) {
         const currDist = computeDistance(unite, ennemi);
-        // try all four directions
         const deltas = [
             { dr:  1, dc:  0 },
             { dr: -1, dc:  0 },
             { dr:  0, dc:  1 },
             { dr:  0, dc: -1 }
         ];
-        // collect moves that reduce distance and are not occupied
+        // moves qui rapprochent
         const candidates = deltas
-            .map(d => ({
-                row: unite.posrow + d.dr,
-                col: unite.poscol + d.dc,
-                dist: Math.hypot((unite.posrow + d.dr) - ennemi.posrow,
-                                 (unite.poscol + d.dc) - ennemi.poscol)
-            }))
-            .filter(m =>
-                m.dist < currDist &&
-                ![...Armee1, ...Armee2].some(u => u !== unite && u.posrow === m.row && u.poscol === m.col)
-            );
+            .map(d => ({ row: unite.posrow + d.dr, col: unite.poscol + d.dc,
+                         dist: Math.hypot((unite.posrow + d.dr) - ennemi.posrow,
+                                          (unite.poscol + d.dc) - ennemi.poscol)}))
+            .filter(m => m.dist < currDist 
+                     && ![...Armee1, ...Armee2].some(u => u !== unite && u.posrow===m.row && u.poscol===m.col));
         if (candidates.length === 0) {
-            // no better free cell: stop trying further
+            // contournement basique : voisin libre quelconque
+            const frees = deltas
+                .map(d => ({ row: unite.posrow + d.dr, col: unite.poscol + d.dc }))
+                .filter(m => ![...Armee1, ...Armee2].some(u => u.posrow===m.row && u.poscol===m.col));
+            if (frees.length > 0) {
+                const alt = frees[0];
+                unite.posrow = alt.row;
+                unite.poscol = alt.col;
+                console.log(`${unite.name} contourne obstacle vers`, alt.row, alt.col);
+                unite.blockCount = 0;
+                continue;
+            }
+            
+            // pas de voisin libre
+            unite.blockCount = (unite.blockCount||0) + 1;
+            if (unite.blockCount >= 5) {
+                unite.blockCount = 0;
+                console.log(`${unite.name} reste bloquée après 5 tentatives, mouvement annulé`);
+                return;  // on abandonne ce tour de déplacement
+            }
             console.log("is blocked");
             return;
         }
-        // pick first (or randomize: candidates[Math.floor(Math.random()*candidates.length)])
-        const move = candidates[0];
-        unite.posrow = move.row;
-        unite.poscol = move.col;
-        console.log("se déplace en", unite.posrow, unite.poscol);
+        
+        // déplaçer vers la première case
+        const mv = candidates[0];
+        unite.posrow = mv.row;  unite.poscol = mv.col;
+        console.log("se déplace en", mv.row, mv.col);
+        unite.blockCount = 0;
     }
-    // return a promise that resolves when the DOM animation finishes
     return animate_move_to(unite);
 }
 
@@ -200,7 +213,7 @@ function attack(unite, ennemi, Armee1, Armee2) {
 
 function animate_attack(unite, ennemi) {
     // arrow animation for Archers
-    if (unite.name === 'Archer') {
+    if (unite.name === 'Archer' || unite.name === 'Frondeur') {
         const battlefield = document.getElementById('battlefield');
         const arrowImg = document.createElement('img');
         arrowImg.src = '../image/arrow.png';
@@ -226,6 +239,52 @@ function animate_attack(unite, ennemi) {
         arrowImg.style.left = ennemi.div.style.left;
         arrowImg.style.top  = ennemi.div.style.top;
         arrowImg.addEventListener('transitionend', () => arrowImg.remove());
+    } else if (unite.name === 'Legionnaire') {
+        const battlefield = document.getElementById('battlefield');
+        const sword = document.createElement('img');
+        sword.src = '../image/sword_rome.png';
+        sword.style.position = 'absolute';
+        sword.style.width = '40px';
+        sword.style.height = '80px';
+        sword.style.zIndex = '1000';
+        sword.style.transformOrigin = '50% 0%';  // pivot top-center
+
+        // compute centers
+        const ux = parseFloat(unite.div.style.left);
+        const uy = parseFloat(unite.div.style.top);
+        const cell = 80, halfCell = cell/2;
+        const centerX = ux + halfCell;
+        const centerY = uy + halfCell;
+
+        // compute unit→enemy direction
+        const tx = parseFloat(ennemi.div.style.left);
+        const ty = parseFloat(ennemi.div.style.top);
+        const dx = tx - centerX, dy = ty - centerY;
+        const dist = Math.hypot(dx, dy) || 1;
+        const nx = dx/dist, ny = dy/dist;
+
+        // offset sword center to unit edge toward enemy
+        const swordW = 60, swordH = 60;
+        const edgeDist = halfCell;   // place at unit border
+        const sx = centerX + nx*edgeDist  - swordW/2;
+        const sy = centerY + ny*edgeDist  - swordH/2;
+        sword.style.left = `${sx}px`;
+        sword.style.top  = `${sy + 50}px`;
+
+        battlefield.appendChild(sword);
+
+        // compute swing angles
+        const baseAngle = Math.atan2(dy, dx)*180/Math.PI - 90;
+        const swing = 60, fromA = baseAngle - swing/2, toA = baseAngle + swing/2;
+        sword.style.transform = `rotate(${fromA}deg)`;
+        void sword.offsetWidth;
+        sword.style.transition = 'transform 0.3s ease-in-out';
+        sword.style.transform = `rotate(${toA}deg)`;
+
+        sword.addEventListener('transitionend', () => {
+            if (sword.parentNode) battlefield.removeChild(sword);
+        }, { once: true });
+
     } else {
         // TODO afficher un GIF après l'attaque
         // afficher un nuage de combat entre les deux unités
@@ -235,7 +294,7 @@ function animate_attack(unite, ennemi) {
         cloud.style.position = 'absolute'
         cloud.style.width  = '200px'
         cloud.style.height = '80px'
-        cloud.style.zIndex = '1000'
+        cloud.style.zIndex = '0'
 
         // calculer le point médian entre attaquant et défenseur
         const ax = parseFloat(unite.div.style.left)
@@ -408,6 +467,7 @@ window.onload = function () {
             if (['1', '2', '3'].includes(id)) {
                 let unit = createUnit(nom, side = 'rome', col, row, camp = 1);
                 unit.div = troopDiv;
+                unit.blockCount = 0;
 
                 Armee1.push(unit);
             }
@@ -415,6 +475,7 @@ window.onload = function () {
             if (['4', '5', '6'].includes(id)) {
                 let unit = createUnit(nom, side = 'carthage', col, row, camp = 1);
                 unit.div = troopDiv;
+                unit.blockCount = 0;
 
                 Armee1.push(unit);
             }
@@ -424,12 +485,15 @@ window.onload = function () {
             if (['1', '2', '3'].includes(id)) {
                 let unit = createUnit(nom, side = 'rome', col, row, camp = 2);
                 unit.div = troopDiv;
+                unit.blockCount = 0;
 
                 Armee2.push(unit);
             }
             if (['4', '5', '6'].includes(id)) {
                 let unit = createUnit(nom, 'carthage', col, row, 2);
                 unit.div = troopDiv;
+                unit.blockCount = 0;
+
                 Armee2.push(unit);
             }
         }
