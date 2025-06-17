@@ -1,5 +1,3 @@
-// TODO implement defense
-
 const unitTypes = {
     Legionnaire: {
         name: 'Legionnaire',
@@ -211,43 +209,50 @@ function attack(unite, ennemi, armee1, armee2) {
 }
 
 function animateAttack(unite, ennemi) {
-    // arrow animation for Archers
     if (unite.name === 'Archer' || unite.name === 'Frondeur') {
-        // TODO Frondeur image lance
         const battlefield = document.getElementById('battlefield');
         const arrowImg = document.createElement('img');
-        arrowImg.src = '../image/arrow.png';
+        if (unite.name === 'Archer') {
+            arrowImg.src = '../image/arrow.png';
+        } else {
+            arrowImg.src = '../image/stone.png';
+        }
         arrowImg.style.position = 'absolute';
         arrowImg.style.width = '60px';
         arrowImg.style.height = '20px';
         arrowImg.style.zIndex = '1000';
-        arrowImg.style.transformOrigin = 'center center';       // set rotation origin
+        arrowImg.style.transformOrigin = 'center center';
         arrowImg.style.transition = 'left 0.3s linear, top 0.3s linear';
-        // start at archer’s pixel coords
         arrowImg.style.left = unite.div.style.left;
         arrowImg.style.top  = unite.div.style.top;
         battlefield.appendChild(arrowImg);
-        // compute angle toward enemy
+
         const startX = parseFloat(arrowImg.style.left);
         const startY = parseFloat(arrowImg.style.top);
         const targetX = parseFloat(ennemi.div.style.left);
         const targetY = parseFloat(ennemi.div.style.top);
         const angleDeg = Math.atan2(targetY - startY, targetX - startX) * 180 / Math.PI;
-        arrowImg.style.transform = `rotate(${angleDeg}deg)`;   // rotate arrow
-        // force reflow then animate position
+        arrowImg.style.transform = `rotate(${angleDeg}deg)`;
+        
         void arrowImg.offsetWidth;
         arrowImg.style.left = ennemi.div.style.left;
         arrowImg.style.top  = ennemi.div.style.top;
         arrowImg.addEventListener('transitionend', () => arrowImg.remove());
-    } else if (unite.name === 'Legionnaire') {
+    } else if (unite.name === 'Legionnaire' || unite.name === 'Lancier') {
         const battlefield = document.getElementById('battlefield');
         const sword = document.createElement('img');
-        sword.src = '../image/sword_rome.png';
+
+        if (unite.name === 'Legionnaire') {
+            sword.src = '../image/sword_rome.png';
+        } else {
+            sword.src = '../image/Lance.png';
+        }
+
         sword.style.position = 'absolute';
         sword.style.width = '40px';
         sword.style.height = '80px';
         sword.style.zIndex = '1000';
-        sword.style.transformOrigin = '50% 0%';  // pivot top-center
+        sword.style.transformOrigin = '50% 0%';
 
         // compute centers
         const ux = parseFloat(unite.div.style.left);
@@ -286,15 +291,22 @@ function animateAttack(unite, ennemi) {
         }, { once: true });
 
     } else {
-        // afficher un nuage de combat entre les deux unités
         const battlefield = document.getElementById('battlefield');
         const cloud = document.createElement('img');
-        // TODO better gif
         cloud.src = '../image/Dust_Sticker.gif'
         cloud.style.position = 'absolute'
         cloud.style.width  = '200px'
         cloud.style.height = '80px'
         cloud.style.zIndex = '1000'
+        cloud.style.transformOrigin = 'center center';
+
+        // calculate direction toward enemy
+        const startX = parseFloat(unite.div.style.left);
+        const startY = parseFloat(unite.div.style.top);
+        const targetX = parseFloat(ennemi.div.style.left);
+        const targetY = parseFloat(ennemi.div.style.top);
+        const angleDeg = Math.atan2(targetY - startY, targetX - startX) * 180 / Math.PI;
+        cloud.style.transform = `rotate(${angleDeg}deg)`;
 
         // calculer le point médian entre attaquant et défenseur
         const ax = parseFloat(unite.div.style.left)
@@ -407,11 +419,7 @@ window.onload = function () {
     container.style.position = 'relative';
     container.style.width = '1000px';
     container.style.height = '90vh';
-    // container.style.background = '#f4f4f4';
     container.id = 'battlefield';
-    // container.style.margin = '40px auto';
-    // container.style.display = 'block';
-    // container.style.border = '2px solid #999';
     document.body.appendChild(container);
 
     const cellWidth = 80;
@@ -431,12 +439,6 @@ window.onload = function () {
         const name = idToName[parseInt(id, 10)];
         if (!name) return;
 
-        // ancien calcul de left avec gap
-        // let left;
-        // if (col <= 4) left = col * cellWidth;
-        // else if (col >= 5) left = (col - 5) * cellWidth + 5 * cellWidth + gap;
-        // else left = 0;
-        // → devient :
         const left = col * cellWidth;
         const top  = row * cellHeight;
 
@@ -449,14 +451,12 @@ window.onload = function () {
         troopDiv.style.height = `${cellHeight}px`;
         troopDiv.style.zIndex = 2;
 
-        // teinte et bordure selon le camp
-        
-
         const img = document.createElement('img');
         img.src = `../image/${name}.png`;
         img.alt = name;
         img.style.width = '100%';
         img.style.height = '100%';
+        
         // assombrir l’image pour le joueur 2
         const params = new URLSearchParams(window.location.search);
         const p1 = params.get('player1Faction');
@@ -521,7 +521,7 @@ window.onload = function () {
             });
     }
 
-    // retire (fuite) les unités dont le moral est à 0 ou moins
+    // retire (fuite) les unités dont le moral est à 0 ou moins (il suffit de spam les élé et si on limite les élé ça n'a aucun interet)
     function applyRouting(army) {
         for (let i = army.length - 1; i >= 0; i--) {
             const u = army[i];
