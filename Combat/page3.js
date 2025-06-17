@@ -461,7 +461,7 @@ window.onload = function () {
         const p1 = params.get('player1Faction');
         const p2 = params.get('player2Faction');
         if (player === '2' && p1 == p2) {
-            img.style.filter = 'saturate(200%)';
+            img.style.filter = 'saturate(130%)';
         }
         troopDiv.appendChild(img);
 
