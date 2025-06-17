@@ -11,7 +11,6 @@ const unitTypes = {
         morale: 5,
         attack: 4,
         defense: 1,
-        line: 1,
         camp: 0,
         portee: 1,
         vitesse: 1,
@@ -22,11 +21,10 @@ const unitTypes = {
         poscol: 0,
         type: 'infanterie longue distance',
         description: "tir à distance avec des flèches, mais vulnérable au corps à corps.",
-        health: 7,
+        health: 10,
         morale: 10,
         attack: 3,
         defense: 2,
-        line: 3,
         camp: 0,
         portee: 3,
         vitesse: 1,
@@ -37,31 +35,35 @@ const unitTypes = {
         poscol: 0,
         type: 'cavalerie lourde',
         description: "Unité de cavalerie lourde, armée d une lance et d un bouclier.",
-        health: 12,
+        health: 10,
         morale: 10,
         attack: 5, // Vous pouvez ajouter +1 lors d'une attaque spécifique si nécessaire
         defense: 2,
-        line: 2,
         camp: 0,
         portee: 1,
         vitesse: 2,
     },
+    Triarii: {
+        name: 'Triarii',
+        posrow: 0, poscol: 0,
+        type: 'infanterie lourde',
+        description: 'Infanterie lourde vétérans, munie de longues lances contre la cavalerie (+1 puissance).',
+        health: 10, morale: 8, attack: 5, defense: 2, camp: 0, portee: 1, vitesse: 1
+    }
 };
 
 // Définition des types d'unités pour Carthage
 const carthageUnitTypes = {
-
     Lancier: {
         name: 'Infanterie Gauloise',
         posrow: 0,
         poscol: 0,
         type: 'infanterie légère',
         description: "Une infanterie courageuse et susceptible de charges furieuses.",
-        health: 9,
+        health: 10,
         morale: 10,
         attack: 4,
         defense: 0,
-        line: 1,
         camp: 0,
         portee: 2,
         vitesse: 1,
@@ -72,11 +74,10 @@ const carthageUnitTypes = {
         poscol: 0,
         type: 'infanterie légère',
         description: "Tireur d élite armé d une fronde, capable de tirer à distance.",
-        health: 6,
+        health: 10,
         morale: 5,
         attack: 6,
         defense: 1,
-        line: 1,
         camp: 0,
         portee: 2,
         vitesse: 1,
@@ -91,7 +92,6 @@ const carthageUnitTypes = {
         morale: 5,
         attack: 4,
         defense: 0,
-        line: 3,
         camp: 0,
         portee: 1,
         vitesse: 1,
@@ -196,7 +196,8 @@ async function move(unite, ennemi, Armee1, Armee2) {
 }
 
 function attack(unite, ennemi, armee1, armee2) {
-    let degat = unite.attack;
+    // puissance moins résistance
+    const degat = Math.max(unite.attack - ennemi.defense, 0);
 
     animateAttack(unite, ennemi);
 
@@ -289,14 +290,14 @@ function animateAttack(unite, ennemi) {
 
     } else {
         // afficher un nuage de combat entre les deux unités
-        const battlefield = document.getElementById('battlefield')
-        const cloud = document.createElement('img')
+        const battlefield = document.getElementById('battlefield');
+        const cloud = document.createElement('img');
         // TODO better gif
-        cloud.src = '../image/cloud_combat.gif'
+        cloud.src = '../image/Dust_Sticker.gif'
         cloud.style.position = 'absolute'
         cloud.style.width  = '200px'
         cloud.style.height = '80px'
-        cloud.style.zIndex = '0'
+        cloud.style.zIndex = '1000'
 
         // calculer le point médian entre attaquant et défenseur
         const ax = parseFloat(unite.div.style.left)
@@ -511,6 +512,19 @@ window.onload = function () {
     });
     console.log('Armee1 :', JSON.parse(JSON.stringify(armee1)));
     console.log('Armee2 :', JSON.parse(JSON.stringify(armee2)));
+
+    // effet « peur » des éléphants
+    function applyElephantFear(army, enemies) {
+        army.filter(u => u.name === 'Eléphants de guerre')
+            .forEach(() => {
+                enemies.forEach(e => {
+                    const delta = e.vitesse > 1 ? -2 : -1;
+                    e.morale = Math.max(e.morale + delta, 0);
+                });
+            });
+    }
+    applyElephantFear(armee1, armee2);
+    applyElephantFear(armee2, armee1);
 
     // battle simulation with delay between actions
     async function runBattle() {
