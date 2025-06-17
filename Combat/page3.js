@@ -1,4 +1,4 @@
-// TODO implement fear, portée, defense
+// TODO implement defense
 
 const unitTypes = {
     Legionnaire: {
@@ -43,13 +43,6 @@ const unitTypes = {
         portee: 1,
         vitesse: 2,
     },
-    Triarii: {
-        name: 'Triarii',
-        posrow: 0, poscol: 0,
-        type: 'infanterie lourde',
-        description: 'Infanterie lourde vétérans, munie de longues lances contre la cavalerie (+1 puissance).',
-        health: 10, morale: 8, attack: 5, defense: 2, camp: 0, portee: 1, vitesse: 1
-    }
 };
 
 // Définition des types d'unités pour Carthage
@@ -197,7 +190,11 @@ async function move(unite, ennemi, Armee1, Armee2) {
 
 function attack(unite, ennemi, armee1, armee2) {
     // puissance moins résistance
-    const degat = Math.max(unite.attack - ennemi.defense, 0);
+    let degat = Math.max(unite.attack - ennemi.defense, 0);
+    // bonus des éléphants de guerre (+1 puissance vs cavalerie)
+    if (unite.name === 'Eléphants de guerre' && ennemi.name === 'Cavalier') {
+        degat += 1;
+    }
 
     animateAttack(unite, ennemi);
 
@@ -523,8 +520,28 @@ window.onload = function () {
                 });
             });
     }
+
+    // retire (fuite) les unités dont le moral est à 0 ou moins
+    function applyRouting(army) {
+        for (let i = army.length - 1; i >= 0; i--) {
+            const u = army[i];
+            if (u.morale <= 0) {
+                if (u.div) u.div.style.display = 'none';
+                console.log(`${u.name} de l'armée ${u.camp} fuit le combat !`);
+                army.splice(i, 1);
+            }
+        }
+    }
+
     applyElephantFear(armee1, armee2);
     applyElephantFear(armee2, armee1);
+    console.log('Morale après effet de peur – Armée 1 :', 
+        armee1.map(u => `${u.name}: ${u.morale}`));
+    console.log('Morale après effet de peur – Armée 2 :', 
+        armee2.map(u => `${u.name}: ${u.morale}`));
+
+    applyRouting(armee1);
+    applyRouting(armee2);
 
     // battle simulation with delay between actions
     async function runBattle() {
