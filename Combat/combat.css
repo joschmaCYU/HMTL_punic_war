@@ -7,6 +7,7 @@
 }
 
 body {
+    background-image: url('../image/combat.png');
     font-family: 'Cinzel', serif;
     margin-top: 90px;
     background-color: #ebdcbd;
