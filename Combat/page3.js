@@ -46,7 +46,7 @@ const unitTypes = {
 // Définition des types d'unités pour Carthage
 const carthageUnitTypes = {
     Lancier: {
-        name: 'Infanterie Gauloise',
+        name: 'Lancier',
         posrow: 0,
         poscol: 0,
         type: 'infanterie légère',
@@ -238,16 +238,11 @@ function animateAttack(unite, ennemi) {
         arrowImg.style.left = ennemi.div.style.left;
         arrowImg.style.top  = ennemi.div.style.top;
         arrowImg.addEventListener('transitionend', () => arrowImg.remove());
-    } else if (unite.name === 'Legionnaire' || unite.name === 'Lancier') {
+    } else if (unite.name === 'Legionnaire') {
         const battlefield = document.getElementById('battlefield');
         const sword = document.createElement('img');
 
-        if (unite.name === 'Legionnaire') {
-            sword.src = '../image/sword_rome.png';
-        } else {
-            sword.src = '../image/Lance.png';
-        }
-
+        sword.src = '../image/sword_rome.png';
         sword.style.position = 'absolute';
         sword.style.width = '40px';
         sword.style.height = '80px';
@@ -290,6 +285,53 @@ function animateAttack(unite, ennemi) {
             if (sword.parentNode) battlefield.removeChild(sword);
         }, { once: true });
 
+    } else if (unite.name === 'Lancier') {
+        const battlefield = document.getElementById('battlefield');
+        
+        const lance = document.createElement('img');
+        lance.src = '../image/Lance.png';
+        lance.style.position = 'absolute';
+        lance.style.width = '80px';
+        lance.style.height = '40px';
+        lance.style.zIndex = '1000';
+        lance.style.transformOrigin = '50% 50%';
+
+        // start position
+        const startX = parseFloat(unite.div.style.left);
+        const startY = parseFloat(unite.div.style.top);
+        lance.style.left = `${startX}px`;
+        lance.style.top  = `${startY}px`;
+
+        // compute target position
+        const targetX = parseFloat(ennemi.div.style.left);
+        const targetY = parseFloat(ennemi.div.style.top);
+
+        // rotate toward enemy
+        const angle = Math.atan2(targetY - startY, targetX - startX) * 180 / Math.PI;
+        lance.style.transform = `rotate(${angle}deg)`;
+
+        // set up transition
+        lance.style.transition = 'left 0.3s linear, top 0.3s linear';
+        battlefield.appendChild(lance);
+
+        let returned = false;
+        lance.addEventListener('transitionend', function handler() {
+            if (!returned) {
+                returned = true;
+                // reverse back to start
+                lance.style.left = `${startX}px`;
+                lance.style.top  = `${startY}px`;
+            } else {
+                // cleanup
+                battlefield.removeChild(lance);
+                lance.removeEventListener('transitionend', handler);
+            }
+        });
+
+        // trigger move forward
+        void lance.offsetWidth;
+        lance.style.left = `${targetX}px`;
+        lance.style.top  = `${targetY}px`;
     } else {
         const battlefield = document.getElementById('battlefield');
         const cloud = document.createElement('img');
@@ -357,7 +399,7 @@ function sleep(ms) {
 // wrap in a Promise so we can wait for the action
 function animateMoveTo(troop) {
     return new Promise(resolve => {
-        const speed = 1;
+        const speed = 1.3;
         const cellWidth  = 80;
         const cellHeight = 80;
 
