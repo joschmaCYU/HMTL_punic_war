@@ -448,11 +448,21 @@ window.onload = function () {
         troopDiv.style.height = `${cellHeight}px`;
         troopDiv.style.zIndex = 2;
 
+        // teinte et bordure selon le camp
+        
+
         const img = document.createElement('img');
         img.src = `../image/${name}.png`;
         img.alt = name;
         img.style.width = '100%';
         img.style.height = '100%';
+        // assombrir l’image pour le joueur 2
+        const params = new URLSearchParams(window.location.search);
+        const p1 = params.get('player1Faction');
+        const p2 = params.get('player2Faction');
+        if (player === '2' && p1 == p2) {
+            img.style.filter = 'saturate(200%)';
+        }
         troopDiv.appendChild(img);
 
         container.appendChild(troopDiv);
