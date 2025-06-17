@@ -1,3 +1,5 @@
+// TODO implement fear, portée, defense
+
 const unitTypes = {
     Legionnaire: {
         name: 'Legionnaire',
@@ -213,6 +215,7 @@ function attack(unite, ennemi, armee1, armee2) {
 function animateAttack(unite, ennemi) {
     // arrow animation for Archers
     if (unite.name === 'Archer' || unite.name === 'Frondeur') {
+        // TODO Frondeur image lance
         const battlefield = document.getElementById('battlefield');
         const arrowImg = document.createElement('img');
         arrowImg.src = '../image/arrow.png';
@@ -285,10 +288,10 @@ function animateAttack(unite, ennemi) {
         }, { once: true });
 
     } else {
-        // TODO afficher un GIF après l'attaque
         // afficher un nuage de combat entre les deux unités
         const battlefield = document.getElementById('battlefield')
         const cloud = document.createElement('img')
+        // TODO better gif
         cloud.src = '../image/cloud_combat.gif'
         cloud.style.position = 'absolute'
         cloud.style.width  = '200px'
@@ -406,11 +409,11 @@ window.onload = function () {
     container.style.position = 'relative';
     container.style.width = '1000px';
     container.style.height = '90vh';
-    container.style.background = '#f4f4f4';
+    // container.style.background = '#f4f4f4';
     container.id = 'battlefield';
-    container.style.margin = '40px auto';
-    container.style.display = 'block';
-    container.style.border = '2px solid #999';
+    // container.style.margin = '40px auto';
+    // container.style.display = 'block';
+    // container.style.border = '2px solid #999';
     document.body.appendChild(container);
 
     const cellWidth = 80;
