@@ -406,9 +406,7 @@ window.onload = function () {
     container.style.position = 'relative';
     container.style.width = '1000px';
     container.style.height = '90vh';
-    container.style.background = '#f4f4f4';
     container.id = 'battlefield';
-    container.style.margin = '40px auto';
     container.style.display = 'block';
     container.style.border = '2px solid #999';
     document.body.appendChild(container);
