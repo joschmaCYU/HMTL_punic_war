@@ -21,15 +21,31 @@ body {
     margin: 30px auto;
 }
 
-h3 {
-    color: #f1f1f1;
-    background-color: #8b5e3c;
-    font-family: 'Greconian', sans-serif;
-    margin-top: 5px;
-    margin-left: 60px;
-    margin-right: 60px;
-    
+p {
+  color: #f1f1f1;
+  background-color: #8b5e3c;
+  font-family: 'Greconian', sans-serif;
+  display: inline-block;
+  margin: 5px auto; /* centré horizontalement */
+  padding: 10px 20px; /* ↑↓ gauche/droite autour du texte */
+  border-radius: 5px;
+  text-align: center;
+  margin-left: 90px;
+
 }
+
+d{
+  color: #f1f1f1;
+  background-color: #8b5e3c;
+  font-family: 'Greconian', sans-serif;
+  display: inline-block;
+  margin: 5px auto; /* centré horizontalement */
+  padding: 10px 20px; /* ↑↓ gauche/droite autour du texte */
+  border-radius: 5px;
+  text-align: center;
+  margin-right: 90px;
+}
+
 
 
 
