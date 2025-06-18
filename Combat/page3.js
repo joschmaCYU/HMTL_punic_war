@@ -389,6 +389,7 @@ async function action(unite, Armee1, Armee2) {
 }
 
 window.onload = function () {
+    
     const params = new URLSearchParams(window.location.search);
     const placement = params.get('troop_placement');
     if (!placement) return;
@@ -528,6 +529,11 @@ function goToPreviousPage() {
 
 // ajout : écran de victoire
 function showWinScreen(winner) {
+    var changeaudio = document.querySelector('audio');
+    changeaudio.src = "../musique/VICTOIRE1.mp3";
+    changeaudio.loop = false;
+    audio.load(); 
+    audio.play();
     const overlay = document.createElement('div');
     overlay.id = 'win-screen';
     overlay.style.position = 'fixed';
