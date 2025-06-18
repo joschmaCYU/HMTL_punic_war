@@ -13,6 +13,8 @@
   font-style: normal;
 }
 
+@import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
+
 #background-video {
   position: fixed;
   top: 0;
@@ -53,20 +55,27 @@ h1 {
 
 
   h2 {
-    background-color: #8b5e3c;
-    padding: 2px 4px;
+    background-color: #8b5e3cb0;
+    padding: 4px 8px;
     border-radius: 5px;
     color: #ffffff;
+    text-align: center;
+    display: inline-block;
+    margin: 5px auto;
+    margin-left: 32px;
 
   }
 
 
+
+
 p {
-  font-family: 'BlockBarthold', sans-serif;
+  font-family: 'Inter', sans-serif;
   text-align: center;
   color: #ffffff;
-
+  font-weight: bold;
 }
+
 
 #player1-image {
     width: 150px;
