@@ -38,8 +38,8 @@ body {
 
 h1 {
  
-    margin-top: 60px;
-    margin-bottom: 10px;
+    margin-top: 50px;
+    margin-bottom: 20px;
     text-align: center;
     color: #321b0d;
     font-size: 4.7rem;
@@ -55,14 +55,10 @@ h1 {
 
 
   h2 {
-    background-color: #8b5e3cb0;
-    padding: 4px 8px;
+    background-color: #8b5e3c;
+    padding: 2px 4px;
     border-radius: 5px;
     color: #ffffff;
-    text-align: center;
-    display: inline-block;
-    margin: 5px auto;
-    margin-left: 32px;
 
   }
 
