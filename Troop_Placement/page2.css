@@ -133,8 +133,14 @@ h1 {
     box-shadow: 0 2px 12px rgba(0,0,0,0.13);
     z-index: 1000;
     display: none;
+    margin-top: 160px;
+
+
 }
+
+
 
 #troop-info-panel hr {
     margin: 8px 0;
 }
+
