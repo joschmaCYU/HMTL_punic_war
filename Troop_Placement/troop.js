@@ -107,8 +107,10 @@ function createTroop(player, name, index) {
 
     setSize(img, 60, 60);
     img.addEventListener('dragstart', handleDragStart);
+
     return wrapper;
 }
+
 
 // ------------------ BOARD CELLS ------------------
 
@@ -296,7 +298,77 @@ function startCombat() {
     window.location.href = `../Combat/page_combat.html?troop_placement=${query}&player1Faction=${p1}&player2Faction=${p2}`;
 
 }
+// Statistiques des troupes (reprend les infos de page3.js)
+const unitStats = {
+    Legionnaire: {
+        name: 'Legionnaire',
+        type: 'Infanterie légère',
+        description: "Unité de base de l'armée romaine, armée d'un glaive et d'un bouclier.",
+        health: 10, morale: 5, attack: 5, defense: 1, portee: 1, vitesse: 1
+    },
+    Archer: {
+        name: 'Archer',
+        type: 'Infanterie longue distance',
+        description: "Tir à distance avec des flèches, mais vulnérable au corps à corps.",
+        health: 7, morale: 10, attack: 3, defense: 2, portee: 4, vitesse: 1
+    },
+    Cavalier: {
+        name: 'Cavalier',
+        type: 'Cavalerie lourde',
+        description: "Unité de cavalerie lourde, armée d'une lance et d'un bouclier.",
+        health: 13, morale: 10, attack: 5, defense: 2, portee: 1, vitesse: 2
+    },
+    Elephants: {
+        name: 'Eléphants de guerre',
+        type: "Unité d’impact psychologique",
+        description: "Effraie particulièrement les chevaux. -1 moral à tous les ennemis à pied et -2 pour ceux à cheval.",
+        health: 15, morale: 5, attack: 4, defense: 0, portee: 1, vitesse: 1
+    },
+    Lancier: {
+        name: 'Infanterie Gauloise',
+        type: 'Infanterie légère',
+        description: "Infanterie courageuse et susceptible de charges furieuses.",
+        health: 9, morale: 10, attack: 4, defense: 0, portee: 2, vitesse: 1
+    },
+    Frondeur: {
+        name: 'Frondeur',
+        type: 'Infanterie légère',
+        description: "Tireur d'élite armé d'une fronde, capable de tirer à distance.",
+        health: 6, morale: 5, attack: 6, defense: 1, portee: 3, vitesse: 1
+    }
+};
 
+const infoPanel = document.getElementById('troop-info-panel');
+
+document.addEventListener('mouseover', function (e) {
+    let name = null;
+    let player = null;
+    if (e.target.classList.contains('troop-item')) {
+        name = e.target.dataset.name || e.target.dataset.trooptype;
+        player = e.target.dataset.player;
+    }
+    if (name && unitStats[name]) {
+        const stats = unitStats[name];
+        infoPanel.innerHTML = `
+            <strong>${stats.name}</strong><br>
+            <em>${stats.type}</em><br>
+            <span style="font-size:13px;">${stats.description}</span>
+            <hr>
+            <b>PV</b>: ${stats.health} &nbsp; <b>Morale</b>: ${stats.morale}<br>
+            <b>Attaque</b>: ${stats.attack} &nbsp; <b>Défense</b>: ${stats.defense}<br>
+            <b>Portée</b>: ${stats.portee} &nbsp; <b>Vitesse</b>: ${stats.vitesse}
+        `;
+        infoPanel.style.display = 'block';
+        // Affiche à gauche pour équipe 1, à droite pour équipe 2
+        if (player === 'player1') {
+            infoPanel.style.left = '40px';
+            infoPanel.style.right = '';
+        } else {
+            infoPanel.style.right = '40px';
+            infoPanel.style.left = '';
+        }
+    }
+});
 // ------------------ RUN ------------------
 
 initialisation()

@@ -117,3 +117,25 @@ h1 {
     padding: 1px;  
   
 }
+
+#troop-info-panel {
+    position: fixed;
+    top: 120px;
+    right: 40px;
+    width: 160px;
+    min-height: 250px;
+    background: rgba(255,255,255,0.97);
+    border: 2px solid #8B5E3C;
+    border-radius: 12px;
+    padding: 18px 20px;
+    color: #321b0d;
+    font-family: 'Cinzel', serif;
+    font-size: 15px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.13);
+    z-index: 1000;
+    display: none;
+}
+
+#troop-info-panel hr {
+    margin: 8px 0;
+}
