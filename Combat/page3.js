@@ -591,7 +591,7 @@ window.onload = function () {
             const first = Math.random();
             const maxLen = Math.max(armee1.length, armee2.length);
             for (let i = 0; i < maxLen; i++) {
-                if (first <= 0.1) {
+                if (first <= 0.3) {
                     if (i < armee1.length) await action(armee1[i], armee1, armee2);
                     if (i < armee2.length) await action(armee2[i], armee1, armee2);
                 } else {
