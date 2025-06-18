@@ -7,6 +7,7 @@
 }
 
 body {
+    background-image: url('../image/combat.png');
     font-family: 'Cinzel', serif;
     margin-top: 90px;
     background-color: #ebdcbd;
@@ -20,14 +21,31 @@ body {
     margin: 30px auto;
 }
 
-h3 {
-    color: #321b0d;
-    font-family: 'Greconian', sans-serif;
-    margin-top: 5px;
-    margin-left: 60px;
-    margin-right: 60px;
-    
+p {
+  color: #f1f1f1;
+  background-color: #8b5e3c;
+  font-family: 'Greconian', sans-serif;
+  display: inline-block;
+  margin: 5px auto; /* centré horizontalement */
+  padding: 10px 20px; /* ↑↓ gauche/droite autour du texte */
+  border-radius: 5px;
+  text-align: center;
+  margin-left: 90px;
+
 }
+
+d{
+  color: #f1f1f1;
+  background-color: #8b5e3c;
+  font-family: 'Greconian', sans-serif;
+  display: inline-block;
+  margin: 5px auto; /* centré horizontalement */
+  padding: 10px 20px; /* ↑↓ gauche/droite autour du texte */
+  border-radius: 5px;
+  text-align: center;
+  margin-right: 90px;
+}
+
 
 
 
@@ -90,22 +108,3 @@ h3 {
     transition: 0.5s;
   }
   
-  .round-btn {
-  position: fixed;
-  top: 20px;
-  left: 20px;
-  width: 50px;
-  height: 50px;
-  background-color: #8b5e3c;
-  color: white;
-  font-size: 24px;
-  font-weight: bold;
-  text-align: center;
-  line-height: 50px;
-  border-radius: 50%;
-  text-decoration: none;
-  box-shadow: 0 0 10px rgba(0,0,0,0.2);
-  transition: transform 0.2s ease, background 0.3s ease;
-  z-index: 100;
-  font-family: 'Cinzel', serif;
-}

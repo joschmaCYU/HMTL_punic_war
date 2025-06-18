@@ -36,7 +36,7 @@ const unitTypes = {
 const carthageUnitTypes = {
 
     Lancier: {
-        name: 'Infanterie Gauloise',
+        name: 'Lancier',
         type: 'infanterie légère',
         description: "Une infanterie courageuse et susceptible de charges furieuses.",
         health: 10,

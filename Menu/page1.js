@@ -13,7 +13,7 @@ const factions = [
 
 let playerSelections = {
     player1: 0,
-    player2: 0
+    player2: 1
 };
 
 function updateFactionDisplay(playerId) {

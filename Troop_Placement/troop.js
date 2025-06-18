@@ -23,8 +23,8 @@ const boardGrid = document.getElementById('board-grid');
 boardGrid.style.gridTemplateColumns = 'repeat(10, 60px)';
 boardGrid.style.gridTemplateRows = 'repeat(10, 60px)';
 
-let troop_number_player1 = [{ "Legionnaire": 2 }, { "Archer": 3 }, { "Cavalier": 5 }, { "Elephants": 5 }, { "Lancier": 5 }, { "Frondeur": 5 }];
-let troop_number_player2 = [{ "Legionnaire": 2 }, { "Archer": 3 }, { "Cavalier": 5 }, { "Elephants": 5 }, { "Lancier": 5 }, { "Frondeur": 5 }];
+let troop_number_player1 = [{ "Legionnaire": 2 }, { "Archer": 3 }, { "Cavalier": 5 }, { "Elephants": 5 }, { "Lancier": 2 }, { "Frondeur": 3 }];
+let troop_number_player2 = [{ "Legionnaire": 2 }, { "Archer": 3 }, { "Cavalier": 5 }, { "Elephants": 5 }, { "Lancier": 2 }, { "Frondeur": 3 }];
 
 // helper to pick the right count array
 function getTroopCounts(player) {
