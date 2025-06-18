@@ -7,7 +7,7 @@ const unitTypes = {
         description: "Unité de base de l armée romaine, armée d un glaive et d un bouclier.",
         health: 10,
         morale: 5,
-        attack: 4,
+        attack: 5,
         defense: 1,
         camp: 0,
         portee: 1,
@@ -24,7 +24,7 @@ const unitTypes = {
         attack: 3,
         defense: 2,
         camp: 0,
-        portee: 3,
+        portee: 4,
         vitesse: 1,
     },
     Cavalier: {
@@ -33,7 +33,7 @@ const unitTypes = {
         poscol: 0,
         type: 'cavalerie lourde',
         description: "Unité de cavalerie lourde, armée d une lance et d un bouclier.",
-        health: 10,
+        health: 13,
         morale: 10,
         attack: 5, // Vous pouvez ajouter +1 lors d'une attaque spécifique si nécessaire
         defense: 2,
@@ -70,7 +70,7 @@ const carthageUnitTypes = {
         attack: 6,
         defense: 1,
         camp: 0,
-        portee: 2,
+        portee: 3,
         vitesse: 1,
     },
     Elephants: {
