@@ -54,11 +54,27 @@ h1 {
 }
 
 
-  h2 {
+h {
     background-color: #8b5e3c;
     padding: 2px 4px;
     border-radius: 5px;
     color: #ffffff;
+    display: inline-block;
+    margin: 15px auto;
+    text-align: center;
+    margin-left: 35px;
+
+  }
+
+  v {
+    background-color: #8b5e3c;
+    padding: 2px 4px;
+    border-radius: 5px;
+    color: #ffffff;
+    display: inline-block;
+    margin: 15px auto;
+    text-align: center;
+    margin-left: 35px;
 
   }
 
