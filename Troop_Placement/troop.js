@@ -325,7 +325,7 @@ const unitStats = {
         health: 15, morale: 5, attack: 4, defense: 0, portee: 1, vitesse: 1
     },
     Lancier: {
-        name: 'Infanterie Gauloise',
+        name: 'Lancier',
         type: 'Infanterie légère',
         description: "Infanterie courageuse et susceptible de charges furieuses.",
         health: 9, morale: 10, attack: 4, defense: 0, portee: 2, vitesse: 1
