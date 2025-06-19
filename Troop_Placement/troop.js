@@ -338,6 +338,8 @@ const unitStats = {
     }
 };
 
+
+
 const infoPanel = document.getElementById('troop-info-panel');
 
 document.addEventListener('mouseover', function (e) {
