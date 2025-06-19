@@ -26,7 +26,7 @@ const unitTypes = {
         defense: 2,
         line: 3,
         camp: 0,
-        portee: 3,
+        portee: 4,
         vitesse: 1,
     },
     Cavalier: {
@@ -76,7 +76,7 @@ const carthageUnitTypes = {
         defense: 1,
         line: 1,
         camp: 0,
-        portee: 2,
+        portee: 3,
         vitesse: 1,
     },
     Elephants: {
@@ -203,8 +203,8 @@ function attack(unite, ennemi, armee1, armee2) {
 
     animateAttack(unite, ennemi);
 
-    if (ennemi.morale <= 3 && unite.morale >= 5) {
-        degat += 2;
+    if (ennemi.morale <= 3) {
+         degat += 2;
     }
     ennemi.health -= degat;
 
