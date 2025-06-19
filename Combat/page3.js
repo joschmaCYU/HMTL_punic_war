@@ -569,7 +569,10 @@ window.onload = function () {
                         ? e.morale / e.initialMorale
                         : 0;
                     // apply it visually (e.g. fade out low-morale troops)
-                    e.div.style.opacity = normalizedMorale;
+                    if (e.div) {
+                        // baisse la saturation en fonction du moral (1 = pleine couleur, 0 = désaturé)
+                        e.div.style.filter = `saturate(${normalizedMorale})`;
+                    }
                 });
             });
     }
