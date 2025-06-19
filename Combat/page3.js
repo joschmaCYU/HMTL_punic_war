@@ -506,6 +506,7 @@ window.onload = function () {
         if (player === '2' && p1 == p2) {
             img.style.filter = 'saturate(130%)';
         }
+
         troopDiv.appendChild(img);
 
         container.appendChild(troopDiv);
@@ -559,6 +560,16 @@ window.onload = function () {
                 enemies.forEach(e => {
                     const delta = e.vitesse > 1 ? -2 : -1;
                     e.morale = Math.max(e.morale + delta, 0);
+                    // ensure we remember the unit’s starting morale
+                    if (e.initialMorale === undefined) {
+                        e.initialMorale = e.morale - delta;
+                    }
+                    // compute normalized value between 0 and 1
+                    const normalizedMorale = e.initialMorale > 0
+                        ? e.morale / e.initialMorale
+                        : 0;
+                    // apply it visually (e.g. fade out low-morale troops)
+                    e.div.style.opacity = normalizedMorale;
                 });
             });
     }
